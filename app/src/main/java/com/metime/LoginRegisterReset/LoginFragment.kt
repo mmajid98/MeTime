@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
-import com.metime.LoginActivity
 import com.metime.R
 
 class LoginFragment : android.support.v4.app.Fragment() {
@@ -22,8 +21,9 @@ class LoginFragment : android.support.v4.app.Fragment() {
         fireAuth = FirebaseAuth.getInstance()
         val user = fireAuth.currentUser
         if (user != null) {
-            Toast.makeText(this.activity, "Logging Current User", Toast.LENGTH_LONG).show()
+            //Toast.makeText(this.activity, "Logging Current User", Toast.LENGTH_LONG).show()
             //startActivity(Intent(this@LoginActivity, NavigationActivity::class.java))
+            fireAuth.signOut()
         }
         mview =  inflater.inflate(R.layout.login_fragment, container, false)
 
@@ -59,7 +59,7 @@ class LoginFragment : android.support.v4.app.Fragment() {
 
             }
             R.id.login_register -> {
-                //startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+                setFragment(RegisterFragment())
             }
 
             R.id.login_facebook -> {

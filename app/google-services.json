@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "428086149768-nb3oonelhh7796vpa18ne0d7lremhmp3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.metime",
+            "certificate_hash": "6504a2d7c51da2f7bca1dbfbab0d246e01ce8b98"
+          }
+        },
+        {
           "client_id": "428086149768-di1b8clokofkj6rmbqsd9n39smhgn737.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "428086149768-di1b8clokofkj6rmbqsd9n39smhgn737.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
