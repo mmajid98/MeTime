@@ -20,6 +20,7 @@ class UsagePresenter(val context: Context, val view: UsageContract.View) : Usage
 
     private var usageStatsManager: UsageStatsManager
     private val packageManager: PackageManager
+    private var duration : Int = -1
 
     init {
         usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
@@ -29,7 +30,7 @@ class UsagePresenter(val context: Context, val view: UsageContract.View) : Usage
     private val startTime: Long
         get() {
             val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_WEEK, -7)
+            calendar.add(Calendar.DAY_OF_YEAR, duration)
             return calendar.timeInMillis
         }
 
@@ -43,11 +44,12 @@ class UsagePresenter(val context: Context, val view: UsageContract.View) : Usage
             return installedApps
         }
 
-    override fun retrieveUsageStats() {
+    override fun retrieveUsageStats(durations : Int) {
         if (!checkForPermission(context)) {
             view.onUserHasNoPermission()
             return
         }
+            duration = durations
             val installedApps = installedAppList
             val usageStats = usageStatsManager.queryAndAggregateUsageStats(startTime, System.currentTimeMillis())
             val stats = ArrayList<UsageStats>()

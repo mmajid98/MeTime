@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Gravity
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -27,10 +28,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.metime.LoginActivity
 import com.metime.LoginRegisterReset.MeProfile
 import com.metime.R
+import com.metime.setChallenge.ChallengeActivity
 import com.socialtime.UsagePresenter
 import com.socialtime.UsageStatsWrapper
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profile.*
+import org.jetbrains.anko.doAsync
 
 class ProfileActivity : AppCompatActivity(), UsageContract.View{
 
@@ -43,6 +46,10 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
     private lateinit var profileLoc : TextView
     private lateinit var profileChal : TextView
     private lateinit var profileFol : TextView
+    private lateinit var setDur : TextView
+    private lateinit var today : TextView
+    private lateinit var week : TextView
+    private lateinit var month : TextView
     private lateinit var profileCHart : PieChart
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,18 +63,47 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         profileLoc = profile_location
         profileChal = profile_challenges
         profileFol = profile_followers
-        setupProfile()
-        setupPic(profile_image)
+
+        doAsync {
+            setupProfile()
+            setupPic(profile_image)
+        }
+
         profile_logout.setOnClickListener{
             fireAuth.signOut()
             startActivity(Intent(this, LoginActivity::class.java))
         }
+        navigation.setOnClickListener {
+            startActivity(Intent(this, ChallengeActivity::class.java))
+        }
+
         //recyclerview.layoutManager = LinearLayoutManager(this)
         //adapter = UsageStatsAdapter()
         //recyclerview.adapter = adapter
-        //grant_permission_message!!.setOnClickListener { v -> openSettings() }
+        grant_permission_message!!.setOnClickListener { v -> openSettings() }
+
+        setDur = Today
+        today = Today
+        week = Week
+        month = Month
         presenter = UsagePresenter(this, this)
         profileCHart = profile_chart
+
+        Today.setOnClickListener(clickListener)
+        Week.setOnClickListener (clickListener)
+        Month.setOnClickListener (clickListener)
+    }
+
+    private val clickListener = View.OnClickListener {
+        if (it != setDur) {
+            setTab(it as TextView, setDur)
+            when (it) {
+                today -> presenter!!.retrieveUsageStats(-1)
+                week -> presenter!!.retrieveUsageStats(-7)
+                month -> presenter!!.retrieveUsageStats(-30)
+            }
+            setDur = it
+        }
     }
 
     private fun openSettings() {
@@ -77,7 +113,11 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
     override fun onResume() {
         super.onResume()
         showProgressBar(true)
-        presenter!!.retrieveUsageStats()
+        when (setDur) {
+            today -> presenter!!.retrieveUsageStats(-1)
+            week -> presenter!!.retrieveUsageStats(-7)
+            month -> presenter!!.retrieveUsageStats(-30)
+        }
     }
 
     override fun onUsageStatsRetrieved(list: MutableList<UsageStatsWrapper>) {
@@ -105,9 +145,10 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         firebaseStorage = FirebaseStorage.getInstance()
         val firebaseRef = firebaseStorage.getReference()
         firebaseRef.child("Profiles").child(fireAuth.uid!!).child("Profile Pic").downloadUrl.addOnSuccessListener {
-            Picasso.get().load(it).into(profilePic)
+            Picasso.get().load(it).fit().centerCrop(Gravity.CENTER).into(profilePic)
         }
     }
+
     private fun setupProfile() {
         firebaseDatabase = FirebaseDatabase.getInstance()
         val databaseReference = firebaseDatabase.getReference("Users").child(fireAuth.uid!!)
@@ -137,13 +178,6 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
                 resources.getColor(R.color.colorPrimary),
                 resources.getColor(R.color.colorAccent)
         )
-
-//        pieDataset.setColors(
-//                resources.getColor(android.R.color.holo_red_light),
-//                resources.getColor(android.R.color.holo_orange_dark),
-//                resources.getColor(android.R.color.holo_orange_light),
-//                resources.getColor(R.color.colorAccent)
-//        )
         val pieData = PieData(pieDataset)
 
         profileCHart.data = pieData
@@ -158,5 +192,15 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         profileCHart.setDrawEntryLabels(false)
         profileCHart.animateY(2000)
         profileCHart.invalidate()
+    }
+
+    fun setTab(dur : TextView, pastDur : TextView) {
+        if (dur != pastDur) {
+            dur.setTextSize(14f)
+            dur.background = (resources.getDrawable(R.drawable.profile_gradient))
+
+            pastDur.setTextSize(12f)
+            pastDur.setBackgroundColor(Color.TRANSPARENT)
+        }
     }
 }
