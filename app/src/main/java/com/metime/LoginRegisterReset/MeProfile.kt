@@ -1,3 +1,3 @@
 package com.metime.LoginRegisterReset
 
-data class MeProfile (var name : String = "", var email : String = "", var image : String = "")
+data class MeProfile (var name : String = "", var city : String = "", var country : String = "", var challenges : Int = 0, var followers : Int = 0)

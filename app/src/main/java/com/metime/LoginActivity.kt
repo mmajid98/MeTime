@@ -17,7 +17,6 @@ class LoginActivity : AppCompatActivity() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_login)
-        val main_frame = findViewById<FrameLayout>(R.id.main_frame)
         val home_fragment  = LoginFragment()
         setFragment(home_fragment)
     }

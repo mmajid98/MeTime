@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
-import com.metime.LoginActivity
 import com.metime.R
+import kotlinx.android.synthetic.main.reset_fragment.view.*
 
 class ResetFragment : android.support.v4.app.Fragment() {
 
@@ -17,56 +17,46 @@ class ResetFragment : android.support.v4.app.Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
 
         fireAuth = FirebaseAuth.getInstance()
         mview =  inflater.inflate(R.layout.reset_fragment, container, false)
 
-        val email_but = mview.findViewById<Button>(R.id.login_button)
-        val reg_but = mview.findViewById<TextView>(R.id.login_register)
-        val fb_but = mview.findViewById<ImageView>(R.id.login_facebook)
-        val google_but = mview.findViewById<ImageView>(R.id.login_google)
-        val forgot_but = mview.findViewById<TextView>(R.id.forgot_password)
-
-        email_but.setOnClickListener(clickListener)
-        reg_but.setOnClickListener(clickListener)
-        fb_but.setOnClickListener(clickListener)
-        google_but.setOnClickListener(clickListener)
-        forgot_but.setOnClickListener(clickListener)
+        mview.reset_button.setOnClickListener(clickListener)
+        mview.reset_register.setOnClickListener(clickListener)
+        mview.reset_facebook.setOnClickListener(clickListener)
+        mview.reset_google.setOnClickListener(clickListener)
+        mview.remember_password.setOnClickListener(clickListener)
         return mview
     }
 
     private val clickListener = View.OnClickListener { view ->
         when(view.id) {
-            R.id.login_button -> {
-                val email = mview.findViewById<EditText>(R.id.login_email).text.toString()
+            R.id.reset_button -> {
 
-                fireAuth.sendPasswordResetEmail(email) .addOnCompleteListener { task ->
+                fireAuth.sendPasswordResetEmail(mview.forgot_email.text.toString()) .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this.activity, "Password reset Email sent.", Toast.LENGTH_LONG).show()
                         setFragment(LoginFragment())
                     }
                     else {
-                        mview.findViewById<EditText>(R.id.login_password).setText("")
-                        Toast.makeText(this.activity, "Unsuccessful Email. <" + task.exception!!.message.toString() + " >", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this.activity, "Unsuccessful. <" + task.exception!!.message.toString() + " >", Toast.LENGTH_LONG).show()
                     }
                 }
 
             }
-            R.id.login_register -> {
-                //startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+            R.id.reset_register -> {
+                setFragment(RegisterFragment())
             }
 
-            R.id.login_facebook -> {
+            R.id.reset_facebook -> {
                 Toast.makeText(this.activity, "fb pressed.", Toast.LENGTH_LONG).show()
             }
 
-            R.id.login_google -> {
+            R.id.reset_google -> {
                 Toast.makeText(this.activity, "google pressed.", Toast.LENGTH_LONG).show()
             }
 
-            R.id.forgot_password -> {
-                Toast.makeText(this.activity, "forgot pressed.", Toast.LENGTH_LONG).show()
+            R.id.remember_password -> {
                 setFragment(LoginFragment())
             }
         }
