@@ -8,9 +8,9 @@ import com.metime.R
 import java.util.concurrent.TimeUnit
 
 class UsageStatsVH (i : View) : RecyclerView.ViewHolder(i) {
-    val appIcon = itemView.findViewById<ImageView>(R.id.icon)
-    val appName = itemView.findViewById<TextView>(R.id.title)
-    val lastTimeUsed = itemView.findViewById<TextView>(R.id.last_used)
+    val appIcon = i.findViewById<ImageView>(R.id.challenge_icon)
+    val appName = i.findViewById<TextView>(R.id.title)
+    val lastTimeUsed = i.findViewById<TextView>(R.id.last_used)
 
     fun bindTo(usageStatsWrapper: UsageStatsWrapper) {
         appIcon.setImageDrawable(usageStatsWrapper.appIcon)

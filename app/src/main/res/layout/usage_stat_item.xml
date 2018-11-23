@@ -5,7 +5,7 @@
     android:layout_height="?android:attr/listPreferredItemHeight">
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/challenge_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_alignParentStart="true"
@@ -17,7 +17,7 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/icon"
+        android:layout_toEndOf="@id/challenge_icon"
         android:lines="1"
         android:maxLines="1"
         android:paddingTop="8dp"
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_toEndOf="@id/icon"
+        android:layout_toEndOf="@id/challenge_icon"
         android:paddingBottom="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textColor="@android:color/darker_gray"

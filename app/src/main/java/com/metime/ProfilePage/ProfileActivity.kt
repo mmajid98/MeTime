@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import com.metime.Constants
+import com.metime.Constants.Companion.profile
 import com.metime.LoginActivity
 import com.metime.LoginRegisterReset.MeProfile
 import com.metime.R
@@ -86,7 +88,7 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         today = Today
         week = Week
         month = Month
-        presenter = UsagePresenter(this, this)
+        presenter = UsagePresenter(this, this, 0)
         profileCHart = profile_chart
 
         Today.setOnClickListener(clickListener)
@@ -140,8 +142,11 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         }
     }
 
-    private fun setupPic(profilePic : ImageView) {
-
+    fun setupPic(profilePic : ImageView) {
+        if (Constants.image != null) {
+            Picasso.get().load(Constants.image).fit().centerCrop(Gravity.CENTER).into(profilePic)
+            return
+        }
         firebaseStorage = FirebaseStorage.getInstance()
         val firebaseRef = firebaseStorage.getReference()
         firebaseRef.child("Profiles").child(fireAuth.uid!!).child("Profile Pic").downloadUrl.addOnSuccessListener {
@@ -150,13 +155,20 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
     }
 
     private fun setupProfile() {
+        @SuppressLint("SetTextI18n")
+        if (Constants.profile.name != "") {
+            profileName.text = Constants.profile.name
+            profileLoc.text = Constants.profile.city + ", " + profile!!.country
+            profileChal.text = Constants.profile.challenges.toString()
+            profileFol.text = Constants.profile.followers.toString()
+            return
+        }
         firebaseDatabase = FirebaseDatabase.getInstance()
         val databaseReference = firebaseDatabase.getReference("Users").child(fireAuth.uid!!)
         var profile : MeProfile?
         val eventListener = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 Toast.makeText(this@ProfileActivity, "Cancelled Database call. <" + p0.code + ">", Toast.LENGTH_SHORT).show()
-
             }
             @SuppressLint("SetTextI18n")
             override fun onDataChange(p0: DataSnapshot) {
@@ -165,6 +177,7 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
                 profileLoc.text = profile!!.city + ", " + profile!!.country
                 profileChal.text = profile!!.challenges.toString()
                 profileFol.text = profile!!.followers.toString()
+                Constants.profile = profile as MeProfile
             }
         }
         databaseReference.addValueEventListener(eventListener)

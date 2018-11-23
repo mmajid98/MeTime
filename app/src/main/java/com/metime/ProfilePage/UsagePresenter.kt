@@ -6,17 +6,14 @@ import android.app.AppOpsManager.OPSTR_GET_USAGE_STATS
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Process.myUid
 import com.github.mikephil.charting.data.PieEntry
-import com.metime.ProfilePage.Constants
+import com.metime.Constants
 import com.metime.ProfilePage.UsageContract
-import com.metime.R
-import org.jetbrains.anko.doAsync
 import java.util.*
 
-class UsagePresenter(val context: Context, val view: UsageContract.View) : UsageContract.Presenter {
+class UsagePresenter(val context: Context, val view: UsageContract.View, val activity : Int) : UsageContract.Presenter {
 
     private var usageStatsManager: UsageStatsManager
     private val packageManager: PackageManager
@@ -76,9 +73,12 @@ class UsagePresenter(val context: Context, val view: UsageContract.View) : Usage
             }
         }
         list.sortByDescending { it.foreground }
-        Constants.pieData = mutableListOf()
-        for ( i in 0..3) {
-            Constants.pieData.add(PieEntry(list[i].foreground.toFloat() , list[i].appName))
+        if (activity == 1) Constants.dataList = list
+        else {
+            Constants.pieData = mutableListOf()
+            for (i in 0..3) {
+                Constants.pieData.add(PieEntry(list[i].foreground.toFloat(), list[i].appName))
+            }
         }
         return mutableListOf()
     }
