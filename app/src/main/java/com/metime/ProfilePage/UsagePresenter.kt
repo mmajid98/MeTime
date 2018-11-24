@@ -87,7 +87,7 @@ class UsagePresenter(val context: Context, val view: UsageContract.View, val act
     private fun fromUsageStat(usageStats: UsageStats): UsageStatsWrapper {
         try {
             val ai = packageManager.getApplicationInfo(usageStats.packageName, 0)
-            return UsageStatsWrapper(usageStats.totalTimeInForeground, packageManager.getApplicationIcon(ai), packageManager.getApplicationLabel(ai).toString())
+            return UsageStatsWrapper(usageStats.packageName, usageStats.totalTimeInForeground, packageManager.getApplicationIcon(ai), packageManager.getApplicationLabel(ai).toString())
 
         } catch (e: PackageManager.NameNotFoundException) {
             throw IllegalArgumentException(e)

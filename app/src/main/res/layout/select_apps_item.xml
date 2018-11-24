@@ -5,8 +5,11 @@
     android:id="@+id/card_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="5sp"
     android:layout_marginLeft="5sp"
     android:layout_marginRight="5sp"
+    android:layout_marginTop="5sp"
+    app:cardBackgroundColor="@android:color/holo_blue_bright"
     app:cardCornerRadius="5sp"
     app:cardElevation="-10sp">
 

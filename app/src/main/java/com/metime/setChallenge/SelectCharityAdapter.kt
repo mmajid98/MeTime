@@ -1,13 +1,10 @@
 package com.metime.setChallenge
 
-import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SwitchCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import android.widget.Switch
 import com.metime.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.set_charities_item.view.*
@@ -16,6 +13,7 @@ class SelectCharityAdapter(val mModelList: List<SelectCharityModel>) : RecyclerV
     var model = SelectCharityModel()
     var selPos = -1
     var curPos = -1
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.set_charities_item, parent, false)
         return MyViewHolder(view)
@@ -24,8 +22,14 @@ class SelectCharityAdapter(val mModelList: List<SelectCharityModel>) : RecyclerV
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         model = mModelList[position]
         curPos = position
-        holder.itemView.ExploreCountry.text = model.text
-        Picasso.get().load(model.icon).into(holder.itemView.ExploreImage)
+        when(position % 2) {
+            0 -> holder.itemView.ExploreLayout.background = holder.itemView.context.getDrawable(R.drawable.profile_gradient)
+            1 ->holder.itemView.ExploreLayout.background = holder.itemView.context.getDrawable(R.drawable.purple_gradient)
+        }
+
+        holder.itemView.ExploreFund.text = model.fund
+        holder.itemView.exploreCountryName.text = model.country
+        holder.itemView.exploreCountry.text = model.Ftype
         holder.itemView.ExploreAdd.isChecked = selPos == position
     }
 
@@ -33,6 +37,9 @@ class SelectCharityAdapter(val mModelList: List<SelectCharityModel>) : RecyclerV
         return mModelList.size
     }
 
+    fun getSelectedChar() : String {
+        return mModelList[curPos].fund
+    }
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             itemView.ExploreAdd.setOnClickListener{

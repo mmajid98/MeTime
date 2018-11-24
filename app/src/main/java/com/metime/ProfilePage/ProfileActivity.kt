@@ -43,16 +43,7 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
     private lateinit var presenter: UsageContract.Presenter
     //private lateinit var adapter: UsageStatsAdapter
     private lateinit var firebaseDatabase : FirebaseDatabase
-    private lateinit var firebaseStorage : FirebaseStorage
-    private lateinit var profileName : TextView
-    private lateinit var profileLoc : TextView
-    private lateinit var profileChal : TextView
-    private lateinit var profileFol : TextView
     private lateinit var setDur : TextView
-    private lateinit var today : TextView
-    private lateinit var week : TextView
-    private lateinit var month : TextView
-    private lateinit var profileCHart : PieChart
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,48 +52,32 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
         fireAuth = FirebaseAuth.getInstance()
         setContentView(R.layout.activity_profile)
-        profileName = profile_name
-        profileLoc = profile_location
-        profileChal = profile_challenges
-        profileFol = profile_followers
-
-        doAsync {
-            setupProfile()
-            setupPic(profile_image)
+        if (Constants.image != null) {
+            Picasso.get().load(Constants.image).fit().centerCrop(Gravity.CENTER).into(profile_image)
+        } else {
+            doAsync { Constants.setupPic(profile_image) }
         }
-
-        profile_logout.setOnClickListener{
-            fireAuth.signOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
-        navigation.setOnClickListener {
-            startActivity(Intent(this, ChallengeActivity::class.java))
-        }
+        if (Constants.profile != null) {
+            profile_name.text = Constants.profile?.name
+            profile_location.text = Constants.profile?.city + ", " + profile?.country
+            profile_challenges.text = Constants.profile?.challenges.toString()
+            profile_followers.text = Constants.profile?.followers.toString()
+            return
+        } else doAsync { setupProfile() }
 
         //recyclerview.layoutManager = LinearLayoutManager(this)
         //adapter = UsageStatsAdapter()
         //recyclerview.adapter = adapter
-        grant_permission_message!!.setOnClickListener { v -> openSettings() }
 
-        setDur = Today
-        today = Today
-        week = Week
-        month = Month
-        presenter = UsagePresenter(this, this, 0)
-        profileCHart = profile_chart
-
-        Today.setOnClickListener(clickListener)
-        Week.setOnClickListener (clickListener)
-        Month.setOnClickListener (clickListener)
     }
 
     private val clickListener = View.OnClickListener {
         if (it != setDur) {
             setTab(it as TextView, setDur)
             when (it) {
-                today -> presenter!!.retrieveUsageStats(-1)
-                week -> presenter!!.retrieveUsageStats(-7)
-                month -> presenter!!.retrieveUsageStats(-30)
+                Today -> presenter.retrieveUsageStats(-1)
+                Week -> presenter.retrieveUsageStats(-7)
+                Month -> presenter.retrieveUsageStats(-30)
             }
             setDur = it
         }
@@ -112,13 +87,33 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
     }
 
+    override fun onStart() {
+        super.onStart()
+        setDur = Today
+        presenter = UsagePresenter(this, this, 0)
+        profile_challenges.text = Constants.profile?.challenges.toString()
+        profile_followers.text = Constants.profile?.followers.toString()
+
+        profile_logout.setOnClickListener{
+            fireAuth.signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+        navigation.setOnClickListener {
+            startActivity(Intent(this, ChallengeActivity::class.java))
+        }
+        grant_permission_message!!.setOnClickListener { v -> openSettings() }
+        Today.setOnClickListener(clickListener)
+        Week.setOnClickListener (clickListener)
+        Month.setOnClickListener (clickListener)
+    }
+
     override fun onResume() {
         super.onResume()
         showProgressBar(true)
         when (setDur) {
-            today -> presenter!!.retrieveUsageStats(-1)
-            week -> presenter!!.retrieveUsageStats(-7)
-            month -> presenter!!.retrieveUsageStats(-30)
+            Today -> presenter!!.retrieveUsageStats(-1)
+            Week -> presenter!!.retrieveUsageStats(-7)
+            Month -> presenter!!.retrieveUsageStats(-30)
         }
     }
 
@@ -142,27 +137,9 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         }
     }
 
-    fun setupPic(profilePic : ImageView) {
-        if (Constants.image != null) {
-            Picasso.get().load(Constants.image).fit().centerCrop(Gravity.CENTER).into(profilePic)
-            return
-        }
-        firebaseStorage = FirebaseStorage.getInstance()
-        val firebaseRef = firebaseStorage.getReference()
-        firebaseRef.child("Profiles").child(fireAuth.uid!!).child("Profile Pic").downloadUrl.addOnSuccessListener {
-            Picasso.get().load(it).fit().centerCrop(Gravity.CENTER).into(profilePic)
-        }
-    }
-
     private fun setupProfile() {
         @SuppressLint("SetTextI18n")
-        if (Constants.profile.name != "") {
-            profileName.text = Constants.profile.name
-            profileLoc.text = Constants.profile.city + ", " + profile!!.country
-            profileChal.text = Constants.profile.challenges.toString()
-            profileFol.text = Constants.profile.followers.toString()
-            return
-        }
+
         firebaseDatabase = FirebaseDatabase.getInstance()
         val databaseReference = firebaseDatabase.getReference("Users").child(fireAuth.uid!!)
         var profile : MeProfile?
@@ -173,10 +150,10 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
             @SuppressLint("SetTextI18n")
             override fun onDataChange(p0: DataSnapshot) {
                 profile = p0.getValue(MeProfile::class.java)
-                profileName.text = profile!!.name
-                profileLoc.text = profile!!.city + ", " + profile!!.country
-                profileChal.text = profile!!.challenges.toString()
-                profileFol.text = profile!!.followers.toString()
+                profile_name.text = profile!!.name
+                profile_location.text = profile!!.city + ", " + profile!!.country
+                profile_challenges.text = profile!!.challenges.toString()
+                profile_followers.text = profile!!.followers.toString()
                 Constants.profile = profile as MeProfile
             }
         }
@@ -193,26 +170,27 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         )
         val pieData = PieData(pieDataset)
 
-        profileCHart.data = pieData
-        profileCHart.data.setValueFormatter(PercentFormatter())
-        profileCHart.data.setValueTextSize(14f)
-        profileCHart.data.setValueTextColor(Color.WHITE)
-        profileCHart.description.text = ""
-        profileCHart.description.textAlign = Paint.Align.LEFT
-        profileCHart.description.textSize = 0f
-        profileCHart.legend.position =  Legend.LegendPosition.ABOVE_CHART_LEFT
-        profileCHart.setUsePercentValues(true)
-        profileCHart.setDrawEntryLabels(false)
-        profileCHart.animateY(2000)
-        profileCHart.invalidate()
+        profile_chart.data = pieData
+        profile_chart.data.setValueFormatter(PercentFormatter())
+        profile_chart.data.setValueTextSize(14f)
+        profile_chart.data.setValueTextColor(Color.WHITE)
+        profile_chart.description.text = ""
+        profile_chart.description.textAlign = Paint.Align.LEFT
+        profile_chart.description.textSize = 0f
+        profile_chart.legend.position =  Legend.LegendPosition.ABOVE_CHART_LEFT
+        profile_chart.setUsePercentValues(true)
+        profile_chart.setDrawEntryLabels(false)
+        profile_chart.animateY(2000)
+        profile_chart.invalidate()
+        profile_chart.legend.textSize = 12f
     }
 
-    fun setTab(dur : TextView, pastDur : TextView) {
+    private fun setTab(dur : TextView, pastDur : TextView) {
         if (dur != pastDur) {
-            dur.setTextSize(14f)
+            dur.setTextSize(16f)
             dur.background = (resources.getDrawable(R.drawable.profile_gradient))
 
-            pastDur.setTextSize(12f)
+            pastDur.setTextSize(14f)
             pastDur.setBackgroundColor(Color.TRANSPARENT)
         }
     }

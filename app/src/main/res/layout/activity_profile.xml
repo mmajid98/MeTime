@@ -30,17 +30,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
-                android:layout_width="match_parent"
-                android:layout_height="96dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15sp"
-                android:elevation="24dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_camera_alt_black_24dp" />
-
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,6 +55,26 @@
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="96sp"
+                android:layout_marginTop="10sp"
+                android:elevation="10sp">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:elevation="24dp"
+
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_camera_alt_black_24dp" />
+            </RelativeLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -133,8 +142,8 @@
                 android:includeFontPadding="false"
                 android:text="22"
                 android:textAlignment="textStart"
-                android:textColor="@color/fui_bgGitHub"
-                android:textSize="18sp"
+                android:textColor="@color/browser_actions_title_color"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -157,8 +166,8 @@
                 android:includeFontPadding="false"
                 android:text="100"
                 android:textAlignment="textStart"
-                android:textColor="@color/fui_bgGitHub"
-                android:textSize="18sp"
+                android:textColor="@color/browser_actions_title_color"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -214,7 +223,7 @@
                 android:padding="5dp"
                 android:text="Most used Apps This Week"
                 android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/Flexible"
@@ -237,7 +246,7 @@
                     android:text="Today"
                     android:textAlignment="center"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/Week"
@@ -249,7 +258,7 @@
                     android:text="7 Days"
                     android:textAlignment="center"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/Month"
@@ -261,7 +270,7 @@
                     android:text="30 Days"
                     android:textAlignment="center"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <com.github.mikephil.charting.charts.PieChart

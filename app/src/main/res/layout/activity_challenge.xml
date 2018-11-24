@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".setChallenge.ChallengeActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,18 +29,20 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="16sp"
                 android:layout_marginTop="10sp"
+                android:layout_weight="1"
                 android:fontFamily="serif"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="$"
-                android:textAlignment="center"
+                android:textAlignment="textEnd"
                 android:textColor="#eefafc"
                 android:textSize="75sp" />
 
             <com.super_rabbit.wheel_picker.WheelPicker
                 android:id="@+id/challenge_money"
                 android:layout_width="wrap_content"
-                android:layout_height="165sp"
+                android:layout_height="135sp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:backgroundTint="@android:color/transparent"
                 android:elevation="100dp"
@@ -54,7 +53,7 @@
                 app:min="1"
                 app:selectedTextColor="#e3f6fd"
                 app:textColor="#74d8fd"
-                app:textSize="50sp"
+                app:textSize="40sp"
                 app:wheelItemCount="3"
                 app:wrapSelectorWheel="false" />
 
@@ -68,7 +67,8 @@
             <com.super_rabbit.wheel_picker.WheelPicker
                 android:id="@+id/challenge_times"
                 android:layout_width="wrap_content"
-                android:layout_height="165sp"
+                android:layout_height="135sp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:backgroundTint="@android:color/transparent"
                 android:elevation="100dp"
@@ -79,7 +79,7 @@
                 app:min="1"
                 app:selectedTextColor="#e3f6fd"
                 app:textColor="#74d8fd"
-                app:textSize="50sp"
+                app:textSize="40sp"
                 app:wheelItemCount="3" />
 
             <TextView
@@ -88,14 +88,15 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="15sp"
                 android:layout_marginTop="10sp"
+                android:layout_weight="1"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:paddingTop="20sp"
+                android:paddingTop="7sp"
                 android:text="Hrs"
                 android:textAlignment="center"
                 android:textColor="#eefafc"
-                android:textSize="35sp"
+                android:textSize="40sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -103,6 +104,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="65sp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
             android:background="@drawable/go_butt">
 
             <android.support.design.widget.FloatingActionButton
@@ -113,144 +116,173 @@
                 android:clickable="true"
                 app:fabSize="normal"
                 app:srcCompat="@drawable/ic_baseline_directions_run_24px" />
+
         </RelativeLayout>
 
-
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:orientation="vertical">
+            android:layout_marginBottom="10sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
-            <TextView
-                android:id="@+id/textView9"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp"
-                android:layout_marginTop="5sp"
-                android:elevation="5sp"
-                app:cardBackgroundColor="#fbfbfb"
-                app:cardCornerRadius="10sp">
-
-                <LinearLayout
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="10sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginRight="10sp"
+                    android:layout_marginTop="5sp"
+                    android:elevation="5sp"
+                    app:cardBackgroundColor="#fbfbfb"
+                    app:cardCornerRadius="10sp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5sp"
-                        android:layout_marginRight="5sp"
-                        android:layout_marginTop="5sp"
-                        android:orientation="horizontal">
-
-                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/challenge_photo"
-                            android:layout_width="50sp"
-                            android:layout_height="50sp"
-                            android:layout_marginRight="5sp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_camera_alt_black_24dp" />
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginLeft="5sp"
+                            android:layout_marginRight="5sp"
+                            android:layout_marginTop="5sp"
+                            android:orientation="horizontal">
+
+                            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/challenge_photo"
+                                android:layout_width="50sp"
+                                android:layout_height="50sp"
+                                android:layout_marginRight="5sp"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_camera_alt_black_24dp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/challenge_name"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Walter Jansma"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:id="@+id/challenge_time"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Now"
+                                    android:textColor="@color/browser_actions_title_color" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/divider2"
+                                android:layout_width="1sp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="?android:attr/listDivider" />
 
                             <TextView
-                                android:id="@+id/challenge_name"
-                                android:layout_width="match_parent"
+                                android:id="@+id/challenge_tm"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Walter Jansma"
-                                android:textColor="@android:color/black"
-                                android:textSize="18sp" />
-
-                            <TextView
-                                android:id="@+id/challenge_time"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Now"
+                                android:text="$2"
+                                android:textAlignment="textEnd"
                                 android:textColor="@android:color/black" />
 
                         </LinearLayout>
 
-                        <View
-                            android:id="@+id/divider2"
-                            android:layout_width="1sp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="?android:attr/listDivider" />
-
-                        <TextView
-                            android:id="@+id/challenge_tm"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$5"
-                            android:textAlignment="textEnd"
-                            android:textColor="@android:color/black" />
-
-                    </LinearLayout>
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10sp"
-                        android:layout_marginLeft="10sp"
-                        android:layout_marginRight="10sp"
-                        android:elevation="-10sp"
-                        app:cardBackgroundColor="@android:color/white"
-                        app:cardCornerRadius="7sp">
-
-                        <EditText
-                            android:id="@+id/challenge_message"
+                        <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:fontFamily="sans-serif"
-                            android:hint="Leave a Message...\n"
-                            android:inputType="textMultiLine"
-                            android:textColor="@android:color/black"
-                            android:textColorHint="@android:color/darker_gray"
-                            android:textSize="16sp" />
-                    </android.support.v7.widget.CardView>
+                            android:layout_marginBottom="10sp"
+                            android:layout_marginLeft="10sp"
+                            android:layout_marginRight="10sp"
+                            android:elevation="-10sp"
+                            app:cardBackgroundColor="@android:color/white"
+                            app:cardCornerRadius="7sp">
 
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                            <EditText
+                                android:id="@+id/challenge_message"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:fontFamily="sans-serif"
+                                android:hint="Leave a Message...\n"
+                                android:includeFontPadding="false"
+                                android:inputType="textMultiLine"
+                                android:textColor="@android:color/black"
+                                android:textColorHint="@android:color/darker_gray"
+                                android:textSize="16sp" />
+                        </android.support.v7.widget.CardView>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-smallcaps"
-                android:paddingLeft="5sp"
-                android:text="Monitored Apps"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:paddingLeft="5sp"
+                    android:text="Monitored Apps"
+                    android:textColor="@color/browser_actions_title_color"
+                    android:textSize="16sp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/select_app_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/challenge_charity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/select_app_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
 
-        </LinearLayout>
+                </android.support.v7.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="5sp"
+                    android:paddingTop="15sp"
+                    android:text="Features Foundations"
+                    android:textColor="@color/browser_actions_title_color"
+                    android:textSize="16sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/challenge_charity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="40sp"
+                    android:orientation="horizontal" />
+
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 
-    </ScrollView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/back_but"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10sp"
+        android:src="@drawable/ic_format_list_bulleted_black_24dp"
+        app:backgroundTint="@color/color3"
+        app:fabSize="normal" />
 
-</LinearLayout>
+</RelativeLayout>
