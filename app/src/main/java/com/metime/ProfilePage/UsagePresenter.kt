@@ -15,14 +15,9 @@ import java.util.*
 
 class UsagePresenter(val context: Context, val view: UsageContract.View, val activity : Int) : UsageContract.Presenter {
 
-    private var usageStatsManager: UsageStatsManager
-    private val packageManager: PackageManager
+    private var usageStatsManager: UsageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+    private val packageManager: PackageManager = context.packageManager
     private var duration : Int = -1
-
-    init {
-        usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-        packageManager = context.packageManager
-    }
 
     private val startTime: Long
         get() {

@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.metime.Constants
+import com.metime.ListChallenges.SetChallengeActivity
 import com.metime.LoginRegisterReset.MeProfile
 import com.metime.ProfilePage.ProfileActivity
 import com.metime.R
@@ -76,12 +77,13 @@ class ChallengeActivity : AppCompatActivity() {
 
             if (adapter.selected > 0 && adapterC.selPos != -1 && !challenge_message.text.toString().contentEquals("")) {
                 sendNewsFeed(money, challenge_message.text.toString())
-                val myRef = firebaseDatabase.getReference("Challenges").child(FirebaseAuth.getInstance().currentUser!!.uid)
+                val myRef = firebaseDatabase.getReference("Challenges").child(FirebaseAuth.getInstance().currentUser!!.uid).child("started")
                 val time = Calendar.getInstance().timeInMillis
                 val endTime = time + timeS*60*60*1000L
-                val myFeed = Challenge(money, time, endTime, adapter.returnSelected(), adapterC.getSelectedChar())
                 val k = myRef.push()
+                val myFeed = Challenge(k.key.toString(), money, time, endTime, adapter.returnSelected(), adapterC.getSelectedChar())
                 k.setValue(myFeed)
+                startActivity(Intent(this, SetChallengeActivity::class.java))
             }
         }
     }

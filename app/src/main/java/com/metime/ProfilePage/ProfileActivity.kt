@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.metime.Constants
 import com.metime.Constants.Companion.profile
+import com.metime.ListChallenges.SetChallengeActivity
 import com.metime.LoginActivity
 import com.metime.LoginRegisterReset.MeProfile
 import com.metime.R
@@ -100,6 +101,9 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         }
         navigation.setOnClickListener {
             startActivity(Intent(this, ChallengeActivity::class.java))
+        }
+        goto_but.setOnClickListener{
+            startActivity(Intent(this, SetChallengeActivity::class.java))
         }
         grant_permission_message!!.setOnClickListener { v -> openSettings() }
         Today.setOnClickListener(clickListener)
