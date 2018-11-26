@@ -6,6 +6,5 @@ data class Challenge (var key: String = "",
                       var endTime: Long = 0,
                       var appNames : List<String> = listOf(),
                       var charity : String = "",
-                      var status: Int = 0,
                       var lost :Int = 0
 )

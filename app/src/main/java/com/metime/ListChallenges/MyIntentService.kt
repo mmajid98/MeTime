@@ -11,18 +11,24 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.metime.setChallenge.Challenge
 import java.util.ArrayList
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.support.v4.app.NotificationCompat
+import com.metime.R
 
 
 class MyIntentService : IntentService("MyIntentService") {
 
     //private var wakeLock: PowerManager.WakeLock? = null
+    private var mNotificationManager: NotificationManager? = null
+    val NOTIFICATION_ID = 1
     private lateinit var usageStatsManager: UsageStatsManager
     private lateinit var fireAuth : FirebaseAuth
     private lateinit var firedb : FirebaseDatabase
     private var dataSent = false
     private var key : String = ""
     init {
-        setIntentRedelivery(true)
+        setIntentRedelivery(false)
     }
 
     override fun onCreate() {
@@ -59,36 +65,48 @@ class MyIntentService : IntentService("MyIntentService") {
                 intent.getLongExtra("start", 0),
                 intent.getLongExtra("end", 0),
                 intent.getStringArrayListExtra("appNames"),
-                intent.getStringExtra("charity"),
-                intent.getIntExtra("status", 0)
+                intent.getStringExtra("charity")
                 )
         key = apps.key
-        firedb.getReference("Challenges").child(fireAuth.currentUser!!.uid).child("started")
-                .child(key).child("status").setValue(1)
-        while (start < end) {
-            Log.i("INTENTSERVICE", "entered loop")
-            val usageStats = usageStatsManager.queryAndAggregateUsageStats(start, System.currentTimeMillis())
-            val stats = ArrayList<UsageStats>()
-            stats.addAll(usageStats.values)
-            for (name in apps.appNames) {
+        if (end > System.currentTimeMillis()) {
+            val startTime = start
+            while (start < end) {
+                Log.i(TAG, "entered loop")
+                val usageStats = usageStatsManager.queryAndAggregateUsageStats(startTime, System.currentTimeMillis())
+                val stats = ArrayList<UsageStats>()
+                stats.addAll(usageStats.values)
+                for (name in apps.appNames) {
                     if (name in usageStats.keys) {
-                        if (usageStats.get(name)!!.totalTimeInForeground > 1000) {
+                        if (usageStats.get(name)!!.lastTimeUsed > startTime) {
+                            Log.i(TAG, "CHALLENGE FAILED")
                             apps.lost = 1
                             sendData(apps)
                             break
                         }
                     }
+                }
                 if (dataSent) break
+                SystemClock.sleep(30000)
+                start = System.currentTimeMillis()
             }
-            start = System.currentTimeMillis()
-            SystemClock.sleep(60000)
         }
-        if (dataSent) sendData(apps)
-
-        /*for (i in 0..9) {
-            Log.d(TAG, "$input - $i")
-            SystemClock.sleep(1000)
-        }*/
+        else {
+            Log.i(TAG, "entered single")
+            val usageStats = usageStatsManager.queryAndAggregateUsageStats(start, end)
+            val stats = ArrayList<UsageStats>()
+            stats.addAll(usageStats.values)
+            for (name in apps.appNames) {
+                if (name in usageStats.keys) {
+                    if (usageStats.get(name)!!.lastTimeUsed > start && usageStats.get(name)!!.lastTimeUsed < end) {
+                        Log.i(TAG, "CHALLENGE FAILED")
+                        apps.lost = 1
+                        sendData(apps)
+                        break
+                    }
+                }
+            }
+        }
+        if (!dataSent) sendData(apps)
     }
 
     private fun sendData(apps: Challenge) {
@@ -97,13 +115,26 @@ class MyIntentService : IntentService("MyIntentService") {
         firedb.getReference("Challenges").child(FirebaseAuth.getInstance().currentUser!!.uid).child("processed")
                 .child(key).setValue(apps)
         dataSent = true
+        sendNotification()
+        stopSelf()
     }
 
+    private fun sendNotification() {
+        mNotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val contentIntent = PendingIntent.getActivity(this, 0,
+                Intent(this, SetChallengeActivity::class.java), 0)
+
+        val mBuilder = NotificationCompat.Builder(this)
+                .setContentTitle("Challenge Completed!")
+                .setStyle(NotificationCompat.BigTextStyle()
+                        .bigText("Hurray!"))
+                .setContentText("Hurray! You have won the challenge!")
+                .setSmallIcon(R.drawable.symbol)
+        mBuilder.setContentIntent(contentIntent)
+        mNotificationManager!!.notify(NOTIFICATION_ID, mBuilder.build())
+    }
     override fun onDestroy() {
-        if (dataSent == false) {
-            firedb.getReference("Challenges").child(fireAuth.currentUser!!.uid)
-                    .child(key).child("started/status").setValue(0)
-        }
         super.onDestroy()
         Log.d(TAG, "onDestroy")
 
@@ -112,6 +143,6 @@ class MyIntentService : IntentService("MyIntentService") {
     }
 
     companion object {
-        private val TAG = "ExampleIntentService"
+        private val TAG = "INTENTSERVICE"
     }
 }

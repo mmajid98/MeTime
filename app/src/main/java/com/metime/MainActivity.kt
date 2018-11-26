@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() , UsageContract.View{
         presenter.retrieveUsageStats(-1)
         if (user != null) {
             Toast.makeText(this, "Logging Current User", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, SetChallengeActivity::class.java))
+            startActivity(Intent(this, ProfileActivity::class.java))
             finish()
         }
         else {

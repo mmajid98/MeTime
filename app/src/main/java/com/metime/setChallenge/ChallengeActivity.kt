@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
-import android.widget.NumberPicker
-import android.widget.Toast
+import android.view.Window
+import android.view.WindowManager
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -15,22 +15,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.metime.Constants
 import com.metime.ListChallenges.SetChallengeActivity
-import com.metime.LoginRegisterReset.MeProfile
 import com.metime.ProfilePage.ProfileActivity
 import com.metime.R
 import com.squareup.picasso.Picasso
 import com.super_rabbit.wheel_picker.OnValueChangeListener
 import com.super_rabbit.wheel_picker.WheelPicker
 import kotlinx.android.synthetic.main.activity_challenge.*
-import kotlinx.android.synthetic.main.register_fragment.view.*
 import org.jetbrains.anko.doAsync
-import org.json.JSONArray
 import org.json.JSONObject
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.io.InputStreamReader
 import java.util.*
 
 class ChallengeActivity : AppCompatActivity() {
@@ -44,6 +39,9 @@ class ChallengeActivity : AppCompatActivity() {
     var adapterC = SelectCharityAdapter(retList)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_challenge)
         firebaseDatabase = FirebaseDatabase.getInstance()
         if (Constants.image != null) {

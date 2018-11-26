@@ -42,7 +42,6 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
 
     private lateinit var fireAuth: FirebaseAuth
     private lateinit var presenter: UsageContract.Presenter
-    //private lateinit var adapter: UsageStatsAdapter
     private lateinit var firebaseDatabase : FirebaseDatabase
     private lateinit var setDur : TextView
 
@@ -65,10 +64,6 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
             profile_followers.text = Constants.profile?.followers.toString()
             return
         } else doAsync { setupProfile() }
-
-        //recyclerview.layoutManager = LinearLayoutManager(this)
-        //adapter = UsageStatsAdapter()
-        //recyclerview.adapter = adapter
 
     }
 
@@ -124,7 +119,6 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
     override fun onUsageStatsRetrieved(list: MutableList<UsageStatsWrapper>) {
         showProgressBar(false)
         grant_permission_message!!.visibility = View.GONE
-        //adapter!!.setList(list)
         setupPie()
     }
 
