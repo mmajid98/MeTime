@@ -12,7 +12,6 @@ import com.metime.R
 import com.metime.setChallenge.Challenge
 import java.util.*
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.view.Window
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_set_challenge.*
@@ -24,6 +23,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.metime.Newsfeed.NewsfeedActivity
 import com.metime.setChallenge.SetViewHolder
 import kotlinx.android.synthetic.main.completed_challenges.*
 import kotlinx.android.synthetic.main.completed_challenges.view.*
@@ -66,17 +66,16 @@ class SetChallengeActivity : AppCompatActivity() {
 
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, model: Challenge) {
                 holder.itemView.setmoney.text = "$"+model.money
+                holder.itemView.settime.text = NewsfeedActivity.setDateFormat(model.endTime)
                 if (model.lost == 1) {
                     holder.itemView.setlayout.background = holder.itemView.resources.getDrawable(R.drawable.purple_gradient)
                     holder.itemView.settitle.text = "Thank You!"
                     holder.itemView.setupdate.text = "For your generous Donation to " + model.charity
-                    holder.itemView.settime.text = sdf.format(model.endTime)
                 }
                 else {
                     holder.itemView.setlayout.background = holder.itemView.resources.getDrawable(R.drawable.profile_gradient)
                     holder.itemView.settitle.text = "Hurray!"
                     holder.itemView.setupdate.text = "You have successfully completed the Challenge!"
-                    holder.itemView.settime.text = sdf.format(model.endTime)
                 }
             }
 
@@ -85,6 +84,9 @@ class SetChallengeActivity : AppCompatActivity() {
             }
         }
         setrecyclerview.adapter = firebaseRecAdapter
+        challengeToNav.setOnClickListener{
+            startActivity(Intent(this, NewsfeedActivity::class.java))
+        }
     }
 
     private fun processPayment(i: Challenge) {
@@ -138,12 +140,11 @@ class SetChallengeActivity : AppCompatActivity() {
     private fun setupCurrent() {
         val i = startedList[0]
         pledged.text = "Pledged $" + i.money + " to " + i.charity
-        Timer.setTextSize(50f)
+        Timer.setTextSize(35f)
         for (s in 1..i.appNames.size) {
             iconlist[s - 1].setImageDrawable(packageManager.getApplicationIcon(i.appNames[s-1]))
         }
         timer = object : CountDownTimer(startedList[0].endTime - System.currentTimeMillis(), 1000) {
-            val sfd = SimpleDateFormat("mm:ss")
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 var x = millisUntilFinished / 1000

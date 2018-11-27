@@ -11,10 +11,8 @@ import android.view.Gravity
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -24,12 +22,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import com.metime.Constants
 import com.metime.Constants.Companion.profile
 import com.metime.ListChallenges.SetChallengeActivity
 import com.metime.LoginActivity
 import com.metime.LoginRegisterReset.MeProfile
+import com.metime.Newsfeed.NewsfeedActivity
 import com.metime.R
 import com.metime.setChallenge.ChallengeActivity
 import com.socialtime.UsagePresenter
@@ -54,16 +52,11 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         setContentView(R.layout.activity_profile)
         if (Constants.image != null) {
             Picasso.get().load(Constants.image).fit().centerCrop(Gravity.CENTER).into(profile_image)
-        } else {
-            doAsync { Constants.setupPic(profile_image) }
-        }
-        if (Constants.profile != null) {
             profile_name.text = Constants.profile?.name
             profile_location.text = Constants.profile?.city + ", " + profile?.country
             profile_challenges.text = Constants.profile?.challenges.toString()
             profile_followers.text = Constants.profile?.followers.toString()
-            return
-        } else doAsync { setupProfile() }
+        }
 
     }
 
@@ -94,8 +87,8 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
             fireAuth.signOut()
             startActivity(Intent(this, LoginActivity::class.java))
         }
-        navigation.setOnClickListener {
-            startActivity(Intent(this, ChallengeActivity::class.java))
+        ProToNews.setOnClickListener {
+            startActivity(Intent(this, NewsfeedActivity::class.java))
         }
         goto_but.setOnClickListener{
             startActivity(Intent(this, SetChallengeActivity::class.java))
@@ -135,35 +128,12 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         }
     }
 
-    private fun setupProfile() {
-        @SuppressLint("SetTextI18n")
-
-        firebaseDatabase = FirebaseDatabase.getInstance()
-        val databaseReference = firebaseDatabase.getReference("Users").child(fireAuth.uid!!)
-        var profile : MeProfile?
-        val eventListener = object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                Toast.makeText(this@ProfileActivity, "Cancelled Database call. <" + p0.code + ">", Toast.LENGTH_SHORT).show()
-            }
-            @SuppressLint("SetTextI18n")
-            override fun onDataChange(p0: DataSnapshot) {
-                profile = p0.getValue(MeProfile::class.java)
-                profile_name.text = profile!!.name
-                profile_location.text = profile!!.city + ", " + profile!!.country
-                profile_challenges.text = profile!!.challenges.toString()
-                profile_followers.text = profile!!.followers.toString()
-                Constants.profile = profile as MeProfile
-            }
-        }
-        databaseReference.addValueEventListener(eventListener)
-    }
-
     fun setupPie() {
         val pieDataset = PieDataSet(Constants.pieData, "")
         pieDataset.setColors(
                 resources.getColor(R.color.colorPrimaryDark),
-                resources.getColor(R.color.color3),
                 resources.getColor(R.color.colorPrimary),
+                resources.getColor(R.color.color3),
                 resources.getColor(R.color.colorAccent)
         )
         val pieData = PieData(pieDataset)

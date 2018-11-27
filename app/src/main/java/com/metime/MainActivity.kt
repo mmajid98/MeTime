@@ -7,11 +7,13 @@ import android.provider.Settings
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.metime.ListChallenges.SetChallengeActivity
+import com.metime.Newsfeed.NewsfeedActivity
 import com.metime.ProfilePage.ProfileActivity
 import com.metime.ProfilePage.UsageContract
 import com.metime.setChallenge.ChallengeActivity
 import com.socialtime.UsagePresenter
 import com.socialtime.UsageStatsWrapper
+import org.jetbrains.anko.doAsync
 
 
 class MainActivity : AppCompatActivity() , UsageContract.View{
@@ -33,7 +35,8 @@ class MainActivity : AppCompatActivity() , UsageContract.View{
         presenter.retrieveUsageStats(-1)
         if (user != null) {
             Toast.makeText(this, "Logging Current User", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, ProfileActivity::class.java))
+            doAsync { Constants.setupPic() }
+            startActivity(Intent(this, NewsfeedActivity::class.java))
             finish()
         }
         else {

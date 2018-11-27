@@ -108,7 +108,7 @@
                     android:background="@android:color/transparent"
                     android:text="LOGOUT"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/color3"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -193,9 +193,9 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:paddingRight="5sp"
-                android:text="EDIT"
+                android:text="EXPAND"
                 android:textAlignment="textEnd"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/color3" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -302,7 +302,7 @@
                 android:visibility="gone" />
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/navigation"
+                android:id="@+id/ProToNews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -311,9 +311,9 @@
                 android:layout_marginRight="5sp"
                 android:background="@android:color/transparent"
                 android:clickable="true"
-                app:backgroundTint="@color/color3"
+                app:backgroundTint="@color/colorPrimary"
                 app:elevation="10dp"
-                app:fabSize="normal"
+                app:fabSize="mini"
                 app:srcCompat="@drawable/ic_format_list_bulleted_black_24dp" />
 
             <!--<RelativeLayout-->

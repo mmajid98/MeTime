@@ -3,6 +3,7 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/anton</item>
         <item>@font/comfortaa_light</item>
+        <item>@font/convergence</item>
         <item>@font/courgette</item>
         <item>@font/lobster</item>
         <item>@font/yeseva_one</item>

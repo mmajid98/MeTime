@@ -1,3 +1,3 @@
 package com.metime.setChallenge
 
-data class NewsFeed (val money: Int, val time : Long, val name: String, val image: String, val message: String)
+data class NewsFeed (var key : String = "", var money: Int = 0, var time : Long = 0, var name: String = "", var image: String = "", var message: String = "", var likes: Int = 0, var likesList : MutableMap<String, String> = mutableMapOf())

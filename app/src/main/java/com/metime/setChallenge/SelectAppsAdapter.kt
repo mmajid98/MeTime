@@ -18,12 +18,12 @@ class SelectAppsAdapter(val mModelList: List<SelectAppsModel>) : RecyclerView.Ad
         val model = mModelList[position]
         holder.itemView.challenge_icon.setImageDrawable(model.icon)
         holder.itemView.challenge_app_name.text = model.text
-        holder.itemView.card_view.setCardBackgroundColor(holder.itemView.resources.getColor(if (model.isSelected) android.R.color.holo_blue_bright else android.R.color.transparent))
+        holder.itemView.card_view.setCardBackgroundColor(holder.itemView.resources.getColor(if (model.isSelected) R.color.colorAccent else android.R.color.transparent))
         holder.itemView.setOnClickListener {
                 model.isSelected = !model.isSelected
             if (model.isSelected) {
                 selected++
-                holder.itemView.card_view.setCardBackgroundColor(holder.itemView.resources.getColor(android.R.color.holo_blue_bright))
+                holder.itemView.card_view.setCardBackgroundColor(holder.itemView.resources.getColor(R.color.colorAccent))
             }
             else {
                 selected--

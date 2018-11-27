@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5sp"
-    android:layout_marginLeft="20sp"
-    android:layout_marginRight="20sp"
-    android:layout_marginTop="5sp">
+    android:layout_marginBottom="10sp"
+    android:layout_marginLeft="30sp"
+    android:layout_marginRight="30sp"
+    android:layout_marginTop="10sp">
 
     <LinearLayout
         android:id="@+id/setlayout"
@@ -23,6 +23,7 @@
             android:id="@+id/setmoney"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2sp"
             android:includeFontPadding="false"
             android:text="$10"
             android:textAlignment="textEnd"
@@ -36,7 +37,7 @@
             android:fontFamily="@font/courgette"
             android:includeFontPadding="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textSize="35sp"
+            android:textSize="25sp"
             tools:text="Hurray!" />
 
         <TextView
@@ -44,14 +45,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
-            android:textSize="18sp"
+            android:textSize="14sp"
             tools:text="You have completed the Challenge!" />
 
         <TextView
             android:id="@+id/settime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10sp"
+            android:paddingTop="5sp"
+            android:textSize="12sp"
             tools:text="yesterday at 18:25" />
     </LinearLayout>
 

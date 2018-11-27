@@ -97,23 +97,20 @@ class RegisterFragment : android.support.v4.app.Fragment() {
 
     private fun sendData() {
 
-        val firebaseDatabase = FirebaseDatabase.getInstance()
-        val myRef = firebaseDatabase.getReference("Users").child(fireAuth.uid!!)
-        val myProfile = MeProfile(mview.username.text.toString(), mview.usercity.text.toString(), mview.usercountry.text.toString(), 0, 0)
-        myRef.setValue(myProfile)
-
-        Toast.makeText(this.activity, "Successful Profile uploaded", Toast.LENGTH_LONG).show()
-
         storageRef = firebaseStorage.getReference().child("Profiles").child(fireAuth.uid!!).child("Profile Pic")
         val uploadTask = storageRef.putFile(imagePath)
         uploadTask.addOnCompleteListener {
-
                 Toast.makeText(this.activity, "Image Uploaded", Toast.LENGTH_SHORT).show()
-
         }.addOnFailureListener {
             Toast.makeText(this.activity, "Image upload failed.", Toast.LENGTH_SHORT).show()
-
         }
+
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        val myRef = firebaseDatabase.getReference("Users").child(fireAuth.uid!!)
+        val myProfile = MeProfile(storageRef.downloadUrl.toString(), mview.username.text.toString(), mview.usercity.text.toString(), mview.usercountry.text.toString(), 0, 0)
+        myRef.setValue(myProfile)
+
+        Toast.makeText(this.activity, "Successful Profile uploaded", Toast.LENGTH_LONG).show()
 
     }
 

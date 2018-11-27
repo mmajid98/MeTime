@@ -33,7 +33,6 @@
             android:singleLine="false"
             android:text="California Fire Relief Fund"
             android:textAlignment="center"
-            android:textColor="#f5d7be"
             android:textSize="18sp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="139dp" />
@@ -80,8 +79,8 @@
                 android:id="@+id/ExploreAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:thumbTint="@android:color/holo_green_dark"
-                android:trackTint="@android:color/darker_gray" />
+                android:thumbTint="@color/color_7_yellow"
+                android:trackTint="@color/browser_actions_bg_grey" />
         </LinearLayout>
 
     </LinearLayout>

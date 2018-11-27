@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.metime.Constants
 import com.metime.ListChallenges.SetChallengeActivity
+import com.metime.Newsfeed.NewsfeedActivity
 import com.metime.ProfilePage.ProfileActivity
 import com.metime.R
 import com.squareup.picasso.Picasso
@@ -46,9 +47,12 @@ class ChallengeActivity : AppCompatActivity() {
         firebaseDatabase = FirebaseDatabase.getInstance()
         if (Constants.image != null) {
             Picasso.get().load(Constants.image).fit().centerCrop(Gravity.CENTER).into(challenge_photo)
+            challenge_name.text = Constants.profile?.name
         }
-        if (Constants.profile != null) challenge_name.text = Constants.profile?.name
-        else doAsync { Constants.setupPic(challenge_photo) }
+        else {
+            doAsync { Constants.setupPic() }
+        }
+
         loadCharityData()
         challenge_money.scrollTo(2)
         challenge_times.scrollTo(2)
@@ -57,7 +61,7 @@ class ChallengeActivity : AppCompatActivity() {
         select_app_recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         select_app_recycler.adapter = adapter
         back_but.setOnClickListener{
-            startActivity(Intent(this, ProfileActivity::class.java))
+            startActivity(Intent(this, NewsfeedActivity::class.java))
         }
         challenge_money.setOnValueChangedListener(object : OnValueChangeListener {
             override fun onValueChange(picker: WheelPicker, oldVal: String, newVal: String) {
@@ -89,8 +93,9 @@ class ChallengeActivity : AppCompatActivity() {
     private fun sendNewsFeed(money: Int, message: String) {
         val myRef = firebaseDatabase.getReference("NewsFeed")
         val time = Calendar.getInstance().timeInMillis
-        val myFeed = NewsFeed(money, time, Constants.profile!!.name, Constants.image!!.toString(), message)
         val k = myRef.push()
+        val myFeed = NewsFeed(k.key.toString(), money, time, Constants.profile!!.name, Constants.image!!.toString(), message)
+
         k.setValue(myFeed)
     }
 
