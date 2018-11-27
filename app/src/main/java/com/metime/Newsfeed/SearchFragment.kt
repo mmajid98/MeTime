@@ -61,7 +61,7 @@ class SearchFragment : Fragment() {
             override fun onBindViewHolder(holder: SearchViewHolder, position: Int, model: MeProfile) {
                 holder.itemView.search_name.text = model.name
                 holder.itemView.search_time.text = model.city + ", " + model.country
-                Picasso.get().load(Constants.image).into(holder.itemView.search_photo)
+                Picasso.get().load(model.image).into(holder.itemView.search_photo)
 
                 holder.itemView.search_follow.setOnClickListener {
                     if (holder.itemView.search_follow.text == "FOLLOW") {
