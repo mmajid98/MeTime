@@ -155,11 +155,13 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
 
     private fun setTab(dur : TextView, pastDur : TextView) {
         if (dur != pastDur) {
-            dur.setTextSize(16f)
+            dur.setTextSize(18f)
             dur.background = (resources.getDrawable(R.drawable.profile_gradient))
+            dur.setTextColor(resources.getColor(android.R.color.background_light))
 
-            pastDur.setTextSize(14f)
+            pastDur.setTextSize(16f)
             pastDur.setBackgroundColor(Color.TRANSPARENT)
+            pastDur.setTextColor(resources.getColor(R.color.browser_actions_title_color))
         }
     }
 }

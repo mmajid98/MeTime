@@ -41,7 +41,7 @@
             android:layout_marginRight="5sp"
             android:includeFontPadding="false"
             android:lines="1"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@android:color/black"

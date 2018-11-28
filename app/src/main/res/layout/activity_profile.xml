@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f5f4f4"
+    android:background="@drawable/back_gradient"
     android:orientation="vertical"
     tools:context=".ProfilePage.ProfileActivity">
 
@@ -73,7 +73,6 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_camera_alt_black_24dp" />
             </RelativeLayout>
-
 
 
             <LinearLayout
@@ -223,7 +222,7 @@
                 android:padding="5dp"
                 android:text="Most used Apps This Week"
                 android:textColor="@android:color/black"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:id="@+id/Flexible"
@@ -245,8 +244,8 @@
                     android:includeFontPadding="false"
                     android:text="Today"
                     android:textAlignment="center"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="16sp" />
+                    android:textColor="@android:color/background_light"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/Week"
@@ -257,8 +256,8 @@
                     android:includeFontPadding="false"
                     android:text="7 Days"
                     android:textAlignment="center"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textColor="@color/browser_actions_title_color"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/Month"
@@ -269,8 +268,8 @@
                     android:includeFontPadding="false"
                     android:text="30 Days"
                     android:textAlignment="center"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textColor="@color/browser_actions_title_color"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <com.github.mikephil.charting.charts.PieChart

@@ -1,5 +1,7 @@
 package com.metime.setChallenge
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -30,7 +32,14 @@ class SelectCharityAdapter(val mModelList: List<SelectCharityModel>) : RecyclerV
         holder.itemView.ExploreFund.text = model.fund
         holder.itemView.exploreCountryName.text = model.country
         holder.itemView.exploreCountry.text = model.Ftype
-        holder.itemView.ExploreAdd.isChecked = selPos == position
+        if (selPos == position) {
+            holder.itemView.ExploreAdd.isChecked = true
+            holder.itemView.ExploreAdd.thumbTintList = ColorStateList.valueOf(holder.itemView.resources.getColor(android.R.color.holo_orange_light))
+        }
+        else {
+            holder.itemView.ExploreAdd.isChecked = false
+            holder.itemView.ExploreAdd.thumbTintList = ColorStateList.valueOf(Color.LTGRAY)
+        }
     }
 
     override fun getItemCount(): Int {

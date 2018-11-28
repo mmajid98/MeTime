@@ -62,12 +62,12 @@ class SearchFragment : Fragment() {
                 holder.itemView.search_name.text = model.name
                 holder.itemView.search_time.text = model.city + ", " + model.country
                 Picasso.get().load(model.image).into(holder.itemView.search_photo)
-
+                holder.itemView.search_follow.text = " FOLLOW + "
                 holder.itemView.search_follow.setOnClickListener {
-                    if (holder.itemView.search_follow.text == "FOLLOW") {
-                        holder.itemView.search_follow.text = "FOLLOWING"
+                    if (holder.itemView.search_follow.text == " FOLLOW + ") {
+                        holder.itemView.search_follow.text = " FOLLOWING "
                     }
-                    else holder.itemView.search_follow.text == "FOLLOW"
+                    else holder.itemView.search_follow.text = " FOLLOW + "
                 }
             }
         }
@@ -77,14 +77,14 @@ class SearchFragment : Fragment() {
 
         v.search_cancel.setOnClickListener{
             if (listener != null) {
-                onButtonPressed()
+                onBackPressed()
             }
         }
 
         return v
     }
 
-    fun onButtonPressed() {
+    fun onBackPressed() {
         listener?.onFragmentInteraction()
     }
 
@@ -134,6 +134,7 @@ class SearchFragment : Fragment() {
                 holder.itemView.search_name.text = model.name
                 holder.itemView.search_time.text = model.city + ", " + model.country
                 Picasso.get().load(Constants.image).into(holder.itemView.search_photo)
+                holder.itemView.search_follow.text = " + FOLLOW "
 
                 holder.itemView.search_follow.setOnClickListener {
                     if (holder.itemView.search_follow.text == " + FOLLOW ") {

@@ -34,8 +34,7 @@ import kotlin.concurrent.timer
 
 
 class SetChallengeActivity : AppCompatActivity() {
-    private lateinit var timer : CountDownTimer
-    private lateinit var iconlist : List<ImageView>
+
     val sdf = SimpleDateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
     private lateinit var fireAuth : FirebaseAuth
     private lateinit var firedb : FirebaseDatabase
@@ -49,8 +48,6 @@ class SetChallengeActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_set_challenge)
-        iconlist = listOf(icon1, icon2, icon3, icon4)
-        getProcessingTasks()
     }
 
     override fun onStart() {
@@ -91,72 +88,5 @@ class SetChallengeActivity : AppCompatActivity() {
 
     private fun processPayment(i: Challenge) {
 
-    }
-
-    private fun getProcessingTasks() {
-        val processRef = firedb.getReference("Challenges").child(fireAuth.currentUser!!.uid).child("started").orderByChild("endTime")
-        val eventListener = object :  ChildEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-            }
-
-            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
-            }
-
-            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
-            }
-
-            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                val i = p0.getValue(Challenge::class.java) as Challenge
-                startedList.add(i)
-                setupCurrentTask()
-                setupCurrent()
-            }
-            override fun onChildRemoved(p0: DataSnapshot) {
-                startedList.removeAt(0)
-                pledged.text = " Not running"
-                for (i in iconlist) i.setImageDrawable(null)
-                Timer.setTextSize(0f)
-                if (startedList.size > 0){
-                    setupCurrent()
-                    setupCurrentTask()
-                }
-            }
-        }
-        processRef.addChildEventListener(eventListener)
-    }
-
-    private fun setupCurrentTask() {
-        val i = startedList[0]
-        val serviceIntent = Intent(this@SetChallengeActivity, MyIntentService::class.java)
-        serviceIntent.putStringArrayListExtra("appNames", i.appNames as ArrayList<String>)
-        serviceIntent.putExtra("start", i.startTime)
-        serviceIntent.putExtra("end", i.endTime)
-        serviceIntent.putExtra("money", i.money)
-        serviceIntent.putExtra("charity", i.charity)
-        serviceIntent.putExtra("key", i.key)
-        startService(serviceIntent)
-    }
-
-    private fun setupCurrent() {
-        val i = startedList[0]
-        pledged.text = "Pledged $" + i.money + " to " + i.charity
-        Timer.setTextSize(35f)
-        for (s in 1..i.appNames.size) {
-            iconlist[s - 1].setImageDrawable(packageManager.getApplicationIcon(i.appNames[s-1]))
-        }
-        timer = object : CountDownTimer(startedList[0].endTime - System.currentTimeMillis(), 1000) {
-            @SuppressLint("SetTextI18n")
-            override fun onTick(millisUntilFinished: Long) {
-                var x = millisUntilFinished / 1000
-                val hours = x / 3600
-                x %= 3600
-                val min = x / 60
-                val sec = x % 60
-                Timer.text = String.format("%02d:%02d:%02d", hours, min, sec)
-            }
-            override fun onFinish() {
-                Timer.text = "00:00:00"
-            }
-        }.start()
     }
 }

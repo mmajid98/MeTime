@@ -61,14 +61,18 @@ class UsagePresenter(val context: Context, val view: UsageContract.View, val act
     private fun buildUsageStatsWrapper(packageNames: List<String>, usageStatses: List<UsageStats>): MutableList<UsageStatsWrapper> {
         val list = mutableListOf<UsageStatsWrapper>()
         for (name in packageNames) {
-            for (stat in usageStatses) {
-                if (name == stat.packageName) {
-                    list.add(fromUsageStat(stat))
+            if ("Android" !in name && name != this.context.packageName ) {
+                for (stat in usageStatses) {
+                    if (name == stat.packageName) {
+                        list.add(fromUsageStat(stat))
+                    }
                 }
             }
         }
         list.sortByDescending { it.foreground }
-        if (activity == 1) Constants.dataList = list
+        if (activity == 1) {
+            Constants.dataList = list
+        }
         else {
             Constants.pieData = mutableListOf()
             for (i in 0..3) {
@@ -92,8 +96,9 @@ class UsagePresenter(val context: Context, val view: UsageContract.View, val act
 
     companion object {
 
-        private val flags = PackageManager.GET_META_DATA or
+        private val flags = PackageManager.GET_META_DATA
+        /*or
                 PackageManager.GET_SHARED_LIBRARY_FILES or
-                PackageManager.GET_UNINSTALLED_PACKAGES
+                PackageManager.GET_UNINSTALLED_PACKAGES*/
     }
 }

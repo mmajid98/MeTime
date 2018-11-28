@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView.ViewHolder
@@ -28,15 +29,19 @@ import kotlinx.android.synthetic.main.search_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+
 class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction() {
-        onBackPressed()
+        supportFragmentManager.beginTransaction().hide(fragment).commit()
     }
-
+    private var timerFrag = false
     private lateinit var fireAuth : FirebaseAuth
     private lateinit var fireDatabase : FirebaseDatabase
     private lateinit var fireRef : DatabaseReference
     private lateinit var fragment : SearchFragment
+    private lateinit var t_fragment : TimerFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -55,7 +60,7 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
         super.onStart()
         feed_search.isFocusable = false
         val options = FirebaseRecyclerOptions.Builder<NewsFeed>()
-                .setQuery(fireRef, NewsFeed::class.java)
+                .setQuery(fireRef.orderByChild("time").limitToLast(20), NewsFeed::class.java)
                 .setLifecycleOwner(this)
                 .build()
 
@@ -107,11 +112,19 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
         feed_search.setOnQueryTextFocusChangeListener { v, hasFocus ->
             setFragment()
         }
+        newsToSet2.setOnClickListener {
+            //val k =
+            if (!timerFrag) setTimerFragment()
+            else {
+                supportFragmentManager.beginTransaction().hide(t_fragment).commit()
+                timerFrag = false
+                (it as FloatingActionButton).setImageDrawable(resources.getDrawable(R.drawable.ic_keyboard_arrow_up_black_24dp))
+            }
+        }
+        //setTimerFragment()
     }
 
-    inner class FireViewHolder(itemView : View) : ViewHolder(itemView){
-
-    }
+    inner class FireViewHolder(itemView : View) : ViewHolder(itemView){ }
 
     companion object {
         fun setDateFormat(time : Long) : String {
@@ -129,9 +142,21 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
         fragment = SearchFragment.newInstance()
         val fragmentTrans = supportFragmentManager.beginTransaction()
         fragmentTrans.setCustomAnimations(R.anim.anim_up, R.anim.anim_down, R.anim.anim_down, R.anim.anim_up)
-        fragmentTrans.addToBackStack(null)
-        fragmentTrans.add(R.id.search_frame, fragment).commit()
+        //fragmentTrans.addToBackStack(null)
+        fragmentTrans.replace(R.id.search_frame, fragment).commit()
     }
+
+    fun setTimerFragment() {
+        t_fragment = TimerFragment()
+        val fragmentTrans = supportFragmentManager.beginTransaction()
+        fragmentTrans.setCustomAnimations(R.anim.anim_down, R.anim.anim_up, R.anim.anim_up, R.anim.anim_down)
+        fragmentTrans.replace(R.id.search_timer, t_fragment).commit()
+        timerFrag = true
+        newsToSet2.setImageDrawable(resources.getDrawable(R.drawable.ic_keyboard_arrow_up_black_24dp))
+    }
+
 }
+
+
 
 
