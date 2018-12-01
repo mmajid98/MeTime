@@ -49,6 +49,9 @@ dependencies {
     implementation 'com.github.SuperRabbitD:NumberPicker:c0c32e342d'
     implementation 'com.android.volley:volley:1.1.1'
     implementation "com.github.mancj:SlideUp-Android:2.2.8"
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+    implementation 'com.stripe:stripe-android:6.1.2'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

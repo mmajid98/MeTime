@@ -1,14 +1,12 @@
 package com.metime.Newsfeed
 
 import android.content.Intent
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView.ViewHolder
-import android.support.v7.widget.SearchView
 import android.view.*
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
@@ -16,16 +14,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.metime.Constants
-import com.metime.LoginRegisterReset.MeProfile
 import com.metime.ProfilePage.ProfileActivity
 import com.metime.R
 import com.metime.setChallenge.ChallengeActivity
 import com.metime.setChallenge.NewsFeed
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_newsfeed.view.*
 import kotlinx.android.synthetic.main.activity_newsfeed.*
 import kotlinx.android.synthetic.main.newsfeed_item.view.*
-import kotlinx.android.synthetic.main.search_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,6 +30,9 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
     override fun onFragmentInteraction() {
         supportFragmentManager.beginTransaction().hide(fragment).commit()
     }
+
+    private var shimmer = false
+    private lateinit var firebaseRecAdapter : FirebaseRecyclerAdapter<NewsFeed, FireViewHolder>
     private var timerFrag = false
     private lateinit var fireAuth : FirebaseAuth
     private lateinit var fireDatabase : FirebaseDatabase
@@ -48,8 +46,7 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newsfeed)
-
-
+        shimmer = true
         fireAuth = FirebaseAuth.getInstance()
         feedRecyclerView.layoutManager = LinearLayoutManager(this)
         fireDatabase = FirebaseDatabase.getInstance()
@@ -58,13 +55,14 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
 
     override fun onStart() {
         super.onStart()
+        shimmer_view_container.startShimmerAnimation()
         feed_search.isFocusable = false
+
         val options = FirebaseRecyclerOptions.Builder<NewsFeed>()
-                .setQuery(fireRef.orderByChild("time").limitToLast(20), NewsFeed::class.java)
+                .setQuery(fireRef.orderByChild("sort").limitToLast(20), NewsFeed::class.java)
                 .setLifecycleOwner(this)
                 .build()
-
-        val firebaseRecAdapter = object : FirebaseRecyclerAdapter<NewsFeed, FireViewHolder>(options) {
+        firebaseRecAdapter = object : FirebaseRecyclerAdapter<NewsFeed, FireViewHolder>(options) {
             override fun onCreateViewHolder(p0: ViewGroup, p1: Int): FireViewHolder {
                 return FireViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.newsfeed_item, p0, false))
             }
@@ -102,26 +100,43 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
                 }
             }
         }
-        feedRecyclerView.adapter = firebaseRecAdapter
+
         newsToPro.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
+            overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right)
         }
         newsToSet.setOnClickListener{
             startActivity(Intent(this, ChallengeActivity::class.java))
+            overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left)
         }
         feed_search.setOnQueryTextFocusChangeListener { v, hasFocus ->
             setFragment()
         }
         newsToSet2.setOnClickListener {
-            //val k =
             if (!timerFrag) setTimerFragment()
             else {
                 supportFragmentManager.beginTransaction().hide(t_fragment).commit()
                 timerFrag = false
-                (it as FloatingActionButton).setImageDrawable(resources.getDrawable(R.drawable.ic_keyboard_arrow_up_black_24dp))
+                (it as FloatingActionButton).setImageDrawable(resources.getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp))
             }
         }
-        //setTimerFragment()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (shimmer) {
+            shimmer = false
+            Handler().postDelayed({
+                shimmer_view_container.stopShimmerAnimation()
+                shimmer_view_container.visibility = View.GONE
+                feedRecyclerView.adapter = firebaseRecAdapter
+            }, 5000)
+        }
+    }
+    override fun onPause() {
+        shimmer_view_container.stopShimmerAnimation()
+        super.onPause()
     }
 
     inner class FireViewHolder(itemView : View) : ViewHolder(itemView){ }
@@ -129,8 +144,8 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
     companion object {
         fun setDateFormat(time : Long) : String {
             val x = (System.currentTimeMillis() - time)
-            if (x > 604800000) return SimpleDateFormat("dd MMM, hh:mm a").format(Date(x))
-            else if (x > 86400000) return SimpleDateFormat("EEE, hh:mm a").format(Date(x))
+            if (x > 604800000) return SimpleDateFormat("dd MMM, hh:mm a").format(Date(time))
+            else if (x > 86400000) return SimpleDateFormat("EEE, hh:mm a").format(Date(time))
             else if (x > 3600000) return String.format("%02d hours ago", x/3600000)
             else if (x > 60000) return String.format("%02d minutes ago", x/60000)
             else return "Now"

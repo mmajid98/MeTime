@@ -1,6 +1,5 @@
 package com.metime.ProfilePage
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
@@ -12,35 +11,26 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
-import android.widget.Toast
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.metime.Constants
 import com.metime.Constants.Companion.profile
 import com.metime.ListChallenges.SetChallengeActivity
 import com.metime.LoginActivity
-import com.metime.LoginRegisterReset.MeProfile
 import com.metime.Newsfeed.NewsfeedActivity
 import com.metime.R
-import com.metime.setChallenge.ChallengeActivity
 import com.socialtime.UsagePresenter
 import com.socialtime.UsageStatsWrapper
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profile.*
-import org.jetbrains.anko.doAsync
 
 class ProfileActivity : AppCompatActivity(), UsageContract.View{
 
     private lateinit var fireAuth: FirebaseAuth
     private lateinit var presenter: UsageContract.Presenter
-    private lateinit var firebaseDatabase : FirebaseDatabase
     private lateinit var setDur : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,10 +42,10 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         setContentView(R.layout.activity_profile)
         if (Constants.image != null) {
             Picasso.get().load(Constants.image).fit().centerCrop(Gravity.CENTER).into(profile_image)
-            profile_name.text = Constants.profile?.name
-            profile_location.text = Constants.profile?.city + ", " + profile?.country
-            profile_challenges.text = Constants.profile?.challenges.toString()
-            profile_followers.text = Constants.profile?.followers.toString()
+            profile_name.text = Constants.profile.name
+            profile_location.text = Constants.profile.city + ", " + profile.country
+            profile_challenges.text = Constants.profile.challenges.toString()
+            profile_followers.text = Constants.profile.followers.toString()
         }
 
     }
@@ -80,8 +70,8 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         super.onStart()
         setDur = Today
         presenter = UsagePresenter(this, this, 0)
-        profile_challenges.text = Constants.profile?.challenges.toString()
-        profile_followers.text = Constants.profile?.followers.toString()
+        profile_challenges.text = Constants.profile.challenges.toString()
+        profile_followers.text = Constants.profile.followers.toString()
 
         profile_logout.setOnClickListener{
             fireAuth.signOut()
@@ -89,6 +79,7 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         }
         ProToNews.setOnClickListener {
             startActivity(Intent(this, NewsfeedActivity::class.java))
+            overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left)
         }
         goto_but.setOnClickListener{
             startActivity(Intent(this, SetChallengeActivity::class.java))
@@ -103,9 +94,9 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
         super.onResume()
         showProgressBar(true)
         when (setDur) {
-            Today -> presenter!!.retrieveUsageStats(-1)
-            Week -> presenter!!.retrieveUsageStats(-7)
-            Month -> presenter!!.retrieveUsageStats(-30)
+            Today -> presenter.retrieveUsageStats(-1)
+            Week -> presenter.retrieveUsageStats(-7)
+            Month -> presenter.retrieveUsageStats(-30)
         }
     }
 

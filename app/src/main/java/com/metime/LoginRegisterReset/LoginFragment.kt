@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
+import com.metime.Newsfeed.NewsfeedActivity
 import com.metime.ProfilePage.ProfileActivity
 import com.metime.R
 import kotlinx.android.synthetic.main.login_fragment.view.*
@@ -33,7 +34,7 @@ class LoginFragment : android.support.v4.app.Fragment() {
         mview.login_register.setOnClickListener(clickListener)
         mview.login_facebook.setOnClickListener(clickListener)
         mview.login_google.setOnClickListener(clickListener)
-        mview.login_password.setOnClickListener(clickListener)
+        mview.forgot_password.setOnClickListener(clickListener)
         return mview
     }
 
@@ -46,7 +47,7 @@ class LoginFragment : android.support.v4.app.Fragment() {
                 ).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this.activity, "Successful Logged In.", Toast.LENGTH_LONG).show()
-                        startActivity(Intent(this.activity, ProfileActivity::class.java))
+                        startActivity(Intent(this.activity, NewsfeedActivity::class.java))
                     }
                     else {
                         mview.login_password.setText("")
@@ -66,7 +67,7 @@ class LoginFragment : android.support.v4.app.Fragment() {
                 Toast.makeText(this.activity, "google pressed.", Toast.LENGTH_LONG).show()
             }
 
-            R.id.login_password -> {
+            R.id.forgot_password -> {
                 setFragment(ResetFragment())
             }
         }

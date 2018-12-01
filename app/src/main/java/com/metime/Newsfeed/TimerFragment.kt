@@ -61,9 +61,9 @@ class TimerFragment : android.support.v4.app.Fragment() {
             }
             override fun onChildRemoved(p0: DataSnapshot) {
                 startedList.removeAt(0)
-                pledged.text = " Not running"
+                mview.drop_pledged.text = " Not running"
                 for (i in iconlist) i.setImageDrawable(null)
-                Timer.setTextSize(0f)
+                mview.drop_timer.setTextSize(0f)
                 if (startedList.size > 0){
                     setupCurrent()
                     setupCurrentTask()

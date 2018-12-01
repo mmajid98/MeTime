@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_profile.*
 
 public class Constants {
     companion object {
+        var customer : Boolean = false
         var pieData = mutableListOf<PieEntry>()
         var profile : MeProfile = MeProfile()
         var image : String? = null

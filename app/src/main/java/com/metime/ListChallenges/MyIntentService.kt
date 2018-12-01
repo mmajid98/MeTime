@@ -19,7 +19,6 @@ import com.metime.R
 
 class MyIntentService : IntentService("MyIntentService") {
 
-    //private var wakeLock: PowerManager.WakeLock? = null
     private var mNotificationManager: NotificationManager? = null
     val NOTIFICATION_ID = 1
     private lateinit var usageStatsManager: UsageStatsManager
@@ -37,21 +36,6 @@ class MyIntentService : IntentService("MyIntentService") {
         usageStatsManager = this.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         fireAuth = FirebaseAuth.getInstance()
         firedb = FirebaseDatabase.getInstance()
-        /*val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                "ExampleApp:Wakelock")
-        wakeLock!!.acquire()
-        Log.d(TAG, "Wakelock acquired")
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("Example IntentService")
-                    .setContentText("Running...")
-                    .setSmallIcon(R.drawable.ic_android)
-                    .build()
-
-            startForeground(1, notification)
-        }*/
     }
 
     override fun onHandleIntent(intent: Intent?) {
@@ -115,31 +99,43 @@ class MyIntentService : IntentService("MyIntentService") {
         firedb.getReference("Challenges").child(FirebaseAuth.getInstance().currentUser!!.uid).child("processed")
                 .child(key).setValue(apps)
         dataSent = true
-        sendNotification()
+        sendNotification(apps.lost)
         stopSelf()
     }
 
-    private fun sendNotification() {
+    private fun sendNotification(lost : Int) {
         mNotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val contentIntent = PendingIntent.getActivity(this, 0,
                 Intent(this, SetChallengeActivity::class.java), 0)
 
-        val mBuilder = NotificationCompat.Builder(this)
-                .setContentTitle("Challenge Completed!")
-                .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText("Hurray!"))
-                .setContentText("Hurray! You have won the challenge!")
-                .setSmallIcon(R.drawable.symbol)
-        mBuilder.setContentIntent(contentIntent)
+        val mBuilder = when(lost) {
+
+            0 -> {
+                NotificationCompat.Builder(this)
+                        .setContentTitle("Challenge Completed")
+                        .setStyle(NotificationCompat.BigTextStyle()
+                                .bigText("Hurray!"))
+                        .setContentText("Hurray! You have won the challenge!")
+                        .setSmallIcon(R.drawable.symbol)
+                        .setVibrate(longArrayOf(500, 1000))
+            }
+            else -> {
+                NotificationCompat.Builder(this)
+                        .setContentTitle("Challenge Completed")
+                        .setStyle(NotificationCompat.BigTextStyle()
+                                .bigText("Thank You!"))
+                        .setContentText("Thank You for your Donation!")
+                        .setSmallIcon(R.drawable.symbol)
+                        .setVibrate(longArrayOf(500, 1000))
+            }
+        }
+                    mBuilder . setContentIntent (contentIntent)
         mNotificationManager!!.notify(NOTIFICATION_ID, mBuilder.build())
     }
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy")
-
-        //wakeLock!!.release()
-        //Log.d(TAG, "Wakelock released")
     }
 
     companion object {

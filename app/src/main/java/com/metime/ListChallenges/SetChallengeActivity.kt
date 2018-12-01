@@ -1,36 +1,26 @@
 package com.metime.ListChallenges
 
-import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.metime.R
 import com.metime.setChallenge.Challenge
-import java.util.*
 import android.content.Intent
 import android.view.Window
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_set_challenge.*
-import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.metime.Newsfeed.NewsfeedActivity
 import com.metime.setChallenge.SetViewHolder
-import kotlinx.android.synthetic.main.completed_challenges.*
 import kotlinx.android.synthetic.main.completed_challenges.view.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import kotlin.concurrent.timer
 
 
 class SetChallengeActivity : AppCompatActivity() {
@@ -38,8 +28,7 @@ class SetChallengeActivity : AppCompatActivity() {
     val sdf = SimpleDateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
     private lateinit var fireAuth : FirebaseAuth
     private lateinit var firedb : FirebaseDatabase
-    private var startedList = mutableListOf<Challenge>()
-    private val processedList = mutableListOf<Challenge>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fireAuth = FirebaseAuth.getInstance()
