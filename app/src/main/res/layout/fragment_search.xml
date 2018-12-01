@@ -32,10 +32,11 @@
                 android:id="@+id/search_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="5sp"
                 android:paddingTop="15sp"
+                android:text="Cancel"
                 android:textAlignment="gravity"
-                android:textColor="@color/browser_actions_bg_grey"
-                android:text="Cancel"/>
+                android:textColor="@color/browser_actions_bg_grey" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView

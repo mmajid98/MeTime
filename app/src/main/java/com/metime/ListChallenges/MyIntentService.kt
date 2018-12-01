@@ -64,6 +64,7 @@ class MyIntentService : IntentService("MyIntentService") {
                         if (usageStats.get(name)!!.lastTimeUsed > startTime) {
                             Log.i(TAG, "CHALLENGE FAILED")
                             apps.lost = 1
+                            apps.endTime = System.currentTimeMillis()
                             sendData(apps)
                             break
                         }
@@ -117,7 +118,7 @@ class MyIntentService : IntentService("MyIntentService") {
                         .setStyle(NotificationCompat.BigTextStyle()
                                 .bigText("Hurray!"))
                         .setContentText("Hurray! You have won the challenge!")
-                        .setSmallIcon(R.drawable.symbol)
+                        .setSmallIcon(R.mipmap.icon_launcher)
                         .setVibrate(longArrayOf(500, 1000))
             }
             else -> {

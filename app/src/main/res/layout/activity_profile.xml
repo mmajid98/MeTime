@@ -85,11 +85,11 @@
                     android:id="@+id/profile_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/yeseva_one"
+                    android:fontFamily="@font/convergence"
                     android:text="Your Name"
                     android:textAlignment="center"
                     android:textColor="#484545"
-                    android:textSize="25sp" />
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/profile_location"
@@ -242,6 +242,8 @@
                     android:elevation="13dp"
                     android:fontFamily="sans-serif-condensed"
                     android:includeFontPadding="false"
+                    android:paddingBottom="2sp"
+                    android:paddingTop="2sp"
                     android:text="Today"
                     android:textAlignment="center"
                     android:textColor="@android:color/background_light"
@@ -254,6 +256,8 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-condensed"
                     android:includeFontPadding="false"
+                    android:paddingBottom="2sp"
+                    android:paddingTop="2sp"
                     android:text="7 Days"
                     android:textAlignment="center"
                     android:textColor="@color/browser_actions_title_color"
@@ -266,6 +270,8 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-condensed"
                     android:includeFontPadding="false"
+                    android:paddingBottom="2sp"
+                    android:paddingTop="2sp"
                     android:text="30 Days"
                     android:textAlignment="center"
                     android:textColor="@color/browser_actions_title_color"
