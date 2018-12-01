@@ -21,6 +21,7 @@ import com.metime.setChallenge.NewsFeed
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_newsfeed.*
 import kotlinx.android.synthetic.main.newsfeed_item.view.*
+import org.jetbrains.anko.doAsync
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -48,6 +49,7 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
         setContentView(R.layout.activity_newsfeed)
         shimmer = true
         fireAuth = FirebaseAuth.getInstance()
+        if (Constants.image != null) doAsync { Constants.setupPic() }
         feedRecyclerView.layoutManager = LinearLayoutManager(this)
         fireDatabase = FirebaseDatabase.getInstance()
         fireRef = fireDatabase.getReference("NewsFeed")
@@ -100,7 +102,7 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
                 }
             }
         }
-
+        feedRecyclerView.adapter = firebaseRecAdapter
         newsToPro.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
             overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right)
@@ -130,7 +132,6 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
             Handler().postDelayed({
                 shimmer_view_container.stopShimmerAnimation()
                 shimmer_view_container.visibility = View.GONE
-                feedRecyclerView.adapter = firebaseRecAdapter
             }, 5000)
         }
     }
@@ -146,8 +147,8 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
             val x = (System.currentTimeMillis() - time)
             if (x > 604800000) return SimpleDateFormat("dd MMM, hh:mm a").format(Date(time))
             else if (x > 86400000) return SimpleDateFormat("EEE, hh:mm a").format(Date(time))
-            else if (x > 3600000) return String.format("%02d hours ago", x/3600000)
-            else if (x > 60000) return String.format("%02d minutes ago", x/60000)
+            else if (x > 3600000) return String.format("%d hours ago", x/3600000)
+            else if (x > 60000) return String.format("%d minutes ago", x/60000)
             else return "Now"
         }
     }

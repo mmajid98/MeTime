@@ -15,6 +15,7 @@ import com.metime.R
 import android.content.Intent
 import android.provider.MediaStore
 import com.google.firebase.database.FirebaseDatabase
+import com.metime.Newsfeed.NewsfeedActivity
 import kotlinx.android.synthetic.main.register_fragment.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -50,13 +51,11 @@ class RegisterFragment : android.support.v4.app.Fragment() {
                     if (task.isSuccessful) {
                         Toast.makeText(this.activity, "Successful Registration", Toast.LENGTH_LONG).show()
                         sendData()
-                        setFragment(LoginFragment())
                     }
                     else Toast.makeText(this.activity, "Unsuccessful Registration. <" + task.exception!!.message.toString() + " >", Toast.LENGTH_LONG).show()
                 }
             }
         }
-
         mview.register_login.setOnClickListener{
             setFragment(LoginFragment())
         }
@@ -96,22 +95,25 @@ class RegisterFragment : android.support.v4.app.Fragment() {
     }
 
     private fun sendData() {
-
-        storageRef = firebaseStorage.getReference().child("Profiles").child(fireAuth.uid!!).child("Profile Pic")
-        val uploadTask = storageRef.putFile(imagePath)
-        uploadTask.addOnCompleteListener {
-                Toast.makeText(this.activity, "Image Uploaded", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            Toast.makeText(this.activity, "Image upload failed.", Toast.LENGTH_SHORT).show()
-        }
-
         val firebaseDatabase = FirebaseDatabase.getInstance()
         val myRef = firebaseDatabase.getReference("Users").child(fireAuth.uid!!)
-        val myProfile = MeProfile(storageRef.downloadUrl.toString(), mview.username.text.toString(), mview.usercity.text.toString(), mview.usercountry.text.toString(), 0, 0)
-        myRef.setValue(myProfile)
-
-        Toast.makeText(this.activity, "Successful Profile uploaded", Toast.LENGTH_LONG).show()
-
+        val myProfile = MeProfile("",
+                mview.username.text.toString(),
+                mview.usercity.text.toString(),
+                mview.usercountry.text.toString()
+        )
+        storageRef = firebaseStorage.getReference().child("Profiles").child(fireAuth.uid!!).child("Profile Pic")
+        storageRef.putFile(imagePath).addOnSuccessListener {
+            myProfile.image = it.storage.downloadUrl.result.toString()
+            myRef.setValue(myProfile).addOnSuccessListener {
+                //Toast.makeText(this.activity, "Successful Profile uploaded", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this.activity, NewsfeedActivity::class.java))
+            }.addOnFailureListener {
+                Toast.makeText(this.activity, "Unsuccessful Profile upload", Toast.LENGTH_LONG).show()
+            }
+        }.addOnFailureListener {
+            Toast.makeText(this.activity, "Image upload failed. Please check your connection or try again.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setFragment(fragment: Fragment): Boolean {

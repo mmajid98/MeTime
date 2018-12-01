@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="16sp"
-                android:layout_marginTop="10sp"
+                android:layout_marginTop="5sp"
                 android:layout_weight="1"
                 android:fontFamily="serif"
                 android:gravity="center"
@@ -51,8 +51,8 @@
                 android:translationZ="100dp"
                 app:align="LEFT"
                 app:fadingEdgeEnabled="false"
-                app:max="100"
-                app:min="-1"
+                app:max="99"
+                app:min="1"
                 app:selectedTextColor="#e3f6fd"
                 app:textColor="#7cc0fa"
                 app:textSize="35sp"
@@ -78,7 +78,7 @@
                 app:align="RIGHT"
                 app:fadingEdgeEnabled="false"
                 app:max="24"
-                app:min="-1"
+                app:min="1"
                 app:selectedTextColor="#e3f6fd"
                 app:textColor="#7cc0fa"
                 app:textSize="35sp"
@@ -116,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:clickable="true"
+                app:backgroundTint="@color/browser_actions_bg_grey"
                 app:fabSize="normal"
                 app:srcCompat="@drawable/ic_baseline_directions_run_24px" />
 
@@ -177,7 +178,8 @@
                                     android:id="@+id/challenge_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Walter Jansma"
+                                    android:fontFamily="@font/convergence"
+                                    android:text="Full Name"
                                     android:textColor="@android:color/black"
                                     android:textSize="16sp" />
 
@@ -269,7 +271,7 @@
                     android:id="@+id/challenge_charity"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="50sp"
+                    android:layout_marginBottom="75sp"
                     android:orientation="horizontal" />
 
             </LinearLayout>
@@ -287,7 +289,7 @@
         android:layout_marginLeft="10sp"
         android:src="@drawable/ic_format_list_bulleted_black_24dp"
         app:backgroundTint="@color/colorPrimary"
-        app:fabSize="mini" />
+        app:fabSize="normal" />
 
     <FrameLayout
         android:id="@+id/payment_frame"

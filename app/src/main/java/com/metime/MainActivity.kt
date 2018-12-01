@@ -35,13 +35,11 @@ class MainActivity : AppCompatActivity() , UsageContract.View{
         presenter.retrieveUsageStats(-1)
         if (user != null) {
             Toast.makeText(this, "Logging Current User", Toast.LENGTH_LONG).show()
-            doAsync { Constants.setupPic() }
             startActivity(Intent(this, NewsfeedActivity::class.java))
             finish()
         }
         else {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
     }

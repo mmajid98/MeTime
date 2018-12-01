@@ -20,14 +20,8 @@ class LoginFragment : android.support.v4.app.Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
 
         fireAuth = FirebaseAuth.getInstance()
-//        val user = fireAuth.currentUser
-//        if (user != null) {
-//            Toast.makeText(this.activity, "Logging Current User", Toast.LENGTH_LONG).show()
-//            startActivity(Intent(this.activity, ProfileActivity::class.java))
-//        }
 
         mview =  inflater.inflate(R.layout.login_fragment, container, false)
         mview.login_button.setOnClickListener(clickListener)

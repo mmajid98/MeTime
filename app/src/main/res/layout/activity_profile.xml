@@ -89,7 +89,7 @@
                     android:text="Your Name"
                     android:textAlignment="center"
                     android:textColor="#484545"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/profile_location"
@@ -312,13 +312,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginBottom="5sp"
-                android:layout_marginRight="5sp"
                 android:background="@android:color/transparent"
                 android:clickable="true"
                 app:backgroundTint="@color/colorPrimary"
                 app:elevation="10dp"
-                app:fabSize="mini"
+                app:fabSize="normal"
                 app:srcCompat="@drawable/ic_format_list_bulleted_black_24dp" />
 
             <!--<RelativeLayout-->

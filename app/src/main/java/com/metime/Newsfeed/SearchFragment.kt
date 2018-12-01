@@ -49,7 +49,7 @@ class SearchFragment : Fragment() {
         v.recycler_search.requestFocus()
 
         val options = FirebaseRecyclerOptions.Builder<MeProfile>()
-                .setQuery(fireRef, MeProfile::class.java)
+                .setQuery(fireRef.orderByChild("name"), MeProfile::class.java)
                 .setLifecycleOwner(this)
                 .build()
 

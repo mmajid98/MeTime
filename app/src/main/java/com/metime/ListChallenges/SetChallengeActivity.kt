@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.metime.Newsfeed.NewsfeedActivity
+import com.metime.ProfilePage.ProfileActivity
 import com.metime.setChallenge.SetViewHolder
 import kotlinx.android.synthetic.main.completed_challenges.view.*
 import java.text.DateFormat
@@ -71,7 +72,7 @@ class SetChallengeActivity : AppCompatActivity() {
         }
         setrecyclerview.adapter = firebaseRecAdapter
         challengeToNav.setOnClickListener{
-            startActivity(Intent(this, NewsfeedActivity::class.java))
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
     }
 

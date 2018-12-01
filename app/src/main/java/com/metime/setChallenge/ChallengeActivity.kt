@@ -86,7 +86,9 @@ class ChallengeActivity : AppCompatActivity(), PaymentFragment.onSomeEventListen
 
                 if (!customer) {
                     payFrag = PaymentFragment()
-                    val x = supportFragmentManager.beginTransaction()
+                    val x = supportFragmentManager
+                            .beginTransaction()
+                            .setCustomAnimations(R.anim.anim_down, R.anim.anim_up, R.anim.anim_up, R.anim.anim_down)
                     x.add(R.id.payment_frame, payFrag).commit()
                 }
                 else {
