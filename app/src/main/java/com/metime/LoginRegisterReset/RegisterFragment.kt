@@ -24,8 +24,6 @@ class RegisterFragment : android.support.v4.app.Fragment() {
 
     private lateinit var fireAuth : FirebaseAuth
 
-    private lateinit var firebaseStorage : FirebaseStorage
-    private lateinit var storageRef : StorageReference
     private lateinit var imagePath : Uri
     companion object {
         const val PICK_IMAGE = 123
@@ -38,8 +36,6 @@ class RegisterFragment : android.support.v4.app.Fragment() {
         fireAuth = FirebaseAuth.getInstance()
         mview =  inflater.inflate(R.layout.register_fragment, container, false)
 
-
-        firebaseStorage = FirebaseStorage.getInstance()
         mview.image_upload.setOnClickListener{
             val intent = Intent().setType("image/*").setAction(Intent.ACTION_GET_CONTENT)
             startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE)
@@ -51,6 +47,7 @@ class RegisterFragment : android.support.v4.app.Fragment() {
                     if (task.isSuccessful) {
                         Toast.makeText(this.activity, "Successful Registration", Toast.LENGTH_LONG).show()
                         sendData()
+                        startActivity(Intent(this.activity, NewsfeedActivity::class.java))
                     }
                     else Toast.makeText(this.activity, "Unsuccessful Registration. <" + task.exception!!.message.toString() + " >", Toast.LENGTH_LONG).show()
                 }
@@ -102,15 +99,10 @@ class RegisterFragment : android.support.v4.app.Fragment() {
                 mview.usercity.text.toString(),
                 mview.usercountry.text.toString()
         )
-        storageRef = firebaseStorage.getReference().child("Profiles").child(fireAuth.uid!!).child("Profile Pic")
+        myRef.setValue(myProfile)
+        val storageRef = FirebaseStorage.getInstance().getReference().child("Profiles").child(fireAuth.uid!!).child("Profile Pic")
         storageRef.putFile(imagePath).addOnSuccessListener {
-            myProfile.image = it.storage.downloadUrl.result.toString()
-            myRef.setValue(myProfile).addOnSuccessListener {
-                //Toast.makeText(this.activity, "Successful Profile uploaded", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this.activity, NewsfeedActivity::class.java))
-            }.addOnFailureListener {
-                Toast.makeText(this.activity, "Unsuccessful Profile upload", Toast.LENGTH_LONG).show()
-            }
+            Toast.makeText(this.activity, "Successful Profile uploaded", Toast.LENGTH_LONG).show()
         }.addOnFailureListener {
             Toast.makeText(this.activity, "Image upload failed. Please check your connection or try again.", Toast.LENGTH_SHORT).show()
         }

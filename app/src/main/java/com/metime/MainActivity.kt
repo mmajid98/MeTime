@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() , UsageContract.View{
         presenter = UsagePresenter(this, this, 1)
         presenter.retrieveUsageStats(-1)
         if (user != null) {
+            doAsync { Constants.setupPic() }
             Toast.makeText(this, "Logging Current User", Toast.LENGTH_LONG).show()
             startActivity(Intent(this, NewsfeedActivity::class.java))
             finish()

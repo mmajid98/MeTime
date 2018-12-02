@@ -16,6 +16,7 @@ import com.metime.Constants
 import com.metime.Constants.Companion.customer
 import com.metime.Newsfeed.NewsfeedActivity
 import com.metime.R
+import com.socialtime.UsagePresenter
 import com.squareup.picasso.Picasso
 import com.super_rabbit.wheel_picker.OnValueChangeListener
 import com.super_rabbit.wheel_picker.WheelPicker
@@ -47,14 +48,15 @@ class ChallengeActivity : AppCompatActivity(), PaymentFragment.onSomeEventListen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_challenge)
-
         firebaseDatabase = FirebaseDatabase.getInstance()
         if (Constants.image != null) {
             Picasso.get().load(Constants.image).fit().centerCrop(Gravity.CENTER).into(challenge_photo)
             challenge_name.text = Constants.profile.name
         }
         else {
-            doAsync { Constants.setupPic() }
+            Constants.setupPic()
+            Picasso.get().load(Constants.image.toString()).fit().centerCrop(Gravity.CENTER).into(challenge_photo)
+            challenge_name.text = Constants.profile.name
         }
 
         loadCharityData()

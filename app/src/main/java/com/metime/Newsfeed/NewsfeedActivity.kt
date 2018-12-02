@@ -49,7 +49,7 @@ class NewsfeedActivity : AppCompatActivity(), SearchFragment.OnFragmentInteracti
         setContentView(R.layout.activity_newsfeed)
         shimmer = true
         fireAuth = FirebaseAuth.getInstance()
-        if (Constants.image != null) doAsync { Constants.setupPic() }
+        if (Constants.image != null) doAsync {Constants.setupPic()}
         feedRecyclerView.layoutManager = LinearLayoutManager(this)
         fireDatabase = FirebaseDatabase.getInstance()
         fireRef = fireDatabase.getReference("NewsFeed")

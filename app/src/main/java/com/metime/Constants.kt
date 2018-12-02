@@ -17,6 +17,7 @@ import com.metime.LoginRegisterReset.MeProfile
 import com.socialtime.UsageStatsWrapper
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profile.*
+import org.jetbrains.anko.doAsync
 
 public class Constants {
     companion object {
@@ -37,7 +38,17 @@ public class Constants {
                 @SuppressLint("SetTextI18n")
                 override fun onDataChange(p0: DataSnapshot) {
                     profile = p0.getValue(MeProfile::class.java) as MeProfile
-                    image = profile.image
+                    if (profile.image != "") {
+                        image = profile.image
+                    }
+                    else {
+                        FirebaseStorage.getInstance().getReference()
+                                .child("Profiles").child(fireAuth.uid!!).child("Profile Pic")
+                                .downloadUrl.addOnSuccessListener {
+                            image = it.toString()
+                            doAsync { databaseReference.child("image").setValue(image) }
+                        }
+                    }
                 }
             }
             databaseReference.addValueEventListener(eventListener)

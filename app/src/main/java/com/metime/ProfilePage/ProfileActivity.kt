@@ -47,6 +47,14 @@ class ProfileActivity : AppCompatActivity(), UsageContract.View{
             profile_challenges.text = Constants.profile.challenges.toString()
             profile_followers.text = Constants.profile.followers.toString()
         }
+        else {
+            Constants.setupPic()
+            Picasso.get().load(Constants.image.toString()).fit().centerCrop(Gravity.CENTER).into(profile_image)
+            profile_name.text = Constants.profile.name
+            profile_location.text = Constants.profile.city + ", " + profile.country
+            profile_challenges.text = Constants.profile.challenges.toString()
+            profile_followers.text = Constants.profile.followers.toString()
+        }
 
     }
 
